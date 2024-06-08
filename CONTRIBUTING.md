@@ -8,4 +8,4 @@ The essential libraries you must have is `Librosa` which with conda can be insta
 
 ## Using Notebooks
 
-It is **not** acceptable anymore to use `.ipynb` due to how it sucks with git. Instead, use the (Jupytext)[https://jupytext.readthedocs.io/en/latest/] format and write all notes in a `.py` file. (:clown_face: if you don't follow this)
+It is **not** acceptable anymore to use `.ipynb` due to how it sucks with git. Instead, use the [Jupytext](https://jupytext.readthedocs.io/en/latest/) format and write all notes in a `.py` file. (:clown_face: if you don't follow this)
