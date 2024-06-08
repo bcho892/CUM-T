@@ -83,4 +83,31 @@ Audio(y_mediums, rate=sr)
 
 # %%
 Audio(y_lows, rate=sr)
+
 # %%
+cent_high = librosa.feature.spectral_centroid(y=y_highs, sr=sr)
+cent_medium = librosa.feature.spectral_centroid(S=S_harmonic_mediums, sr=sr)
+cent_low = librosa.feature.spectral_centroid(S=S_harmonic_lows, sr=sr)
+
+# %%
+times_high = librosa.times_like(cent_high)
+fig, ax = plt.subplots()
+
+ax.plot(times_high, cent_high.T, label='Spectral centroid', color='b')
+ax.legend(loc='upper right')
+ax.set(title='Spectral centroid for highs')
+# %%
+times_medium = librosa.times_like(cent_medium)
+fig, ax = plt.subplots()
+
+ax.plot(times_medium, cent_medium.T, label='Spectral centroid', color='b')
+ax.legend(loc='upper right')
+ax.set(title='Spectral centroid for mediums')
+
+# %%
+times_low = librosa.times_like(cent_low)
+fig, ax = plt.subplots()
+
+ax.plot(times_low, cent_low.T, label='Spectral centroid', color='b')
+ax.legend(loc='upper right')
+ax.set(title='Spectral centroid for lows')
