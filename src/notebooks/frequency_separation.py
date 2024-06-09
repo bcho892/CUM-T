@@ -93,18 +93,18 @@ cent_high = librosa.feature.spectral_centroid(y=y_highs, sr=sr)
 cent_medium = librosa.feature.spectral_centroid(S=S_harmonic_mediums, sr=sr)
 cent_low = librosa.feature.spectral_centroid(S=S_harmonic_lows, sr=sr)
 
-onset_medium =  librosa.onset.onset_strength(S=S_harmonic_mediums, sr=sr)
-onset_low =  librosa.onset.onset_strength(S=S_harmonic_lows , sr=sr)
+onset_medium =  librosa.onset.onset_strength(y=y_mediums, sr=sr)
+onset_low =  librosa.onset.onset_strength(y=y_lows , sr=sr)
 
 # %%
-times_high = librosa.times_like(cent_high)
+times_high = librosa.times_like(cent_high, sr=sr)
 fig, ax = plt.subplots()
 
 ax.plot(times_high, cent_high.T, label='Spectral centroid', color='b')
 ax.legend(loc='upper right')
 ax.set(title='Spectral centroid for highs')
 
-times_medium = librosa.times_like(cent_medium)
+times_medium = librosa.times_like(cent_medium, sr=sr)
 fig, ax = plt.subplots(2)
 
 ax[0].plot(times_medium, cent_medium.T, label='Spectral centroid', color='b')
@@ -115,7 +115,7 @@ ax[1].plot(times_medium, onset_medium.T, label='Attack', color='b')
 ax[1].legend(loc='upper right')
 ax[1].set(title='Attack for mediums')
 
-times_low = librosa.times_like(cent_low)
+times_low = librosa.times_like(cent_low, sr=sr)
 fig, ax = plt.subplots(2)
 
 ax[0].plot(times_low, cent_low.T, label='Spectral centroid', color='b')
@@ -137,11 +137,23 @@ def normalise(signal, ref_max = reference_max, ref_min = reference_min):
     reference_diff = ref_max - ref_min
     return reference_diff * ((signal - min) / (difference)) + ref_min
 
-fig, ax = plt.subplots(3)
+fig, ax = plt.subplots(4)
 normalised_cent_low = normalise(cent_low)
 normalised_onset_low = normalise(onset_low, 1, 0)
 
-binary_masked_onset_low = (normalised_onset_low > 0.3).astype(int)
+binary_masked_onset_low = (normalised_onset_low > 0.5).astype(int)
+def shift(arr, amount):
+
+    new_arr = np.roll(arr, amount)
+
+    if(amount < 0):
+        new_arr[(len(arr) -  1 + amount):] = 0
+    else: 
+        new_arr[:amount] = 0
+
+    return new_arr
+    
+shifted_binary_masked_onset_low = shift(binary_masked_onset_low, -50)
 
 ax[0].plot(times_low, normalised_cent_low.T, label='Spectral centroid normalised', color='b')
 ax[0].legend(loc='upper right')
@@ -152,8 +164,9 @@ ax[1].set(title='Attack for lows')
 ax[2].plot(times_low, binary_masked_onset_low.T, label='Attack', color='b')
 ax[2].legend(loc='upper right')
 ax[2].set(title='binary Attack for lows')
-    
-
+ax[3].plot(times_low, shifted_binary_masked_onset_low.T, label='Attack', color='b')
+ax[3].legend(loc='upper right')
+ax[3].set(title='shifted binary Attack for lows')
 
 # %%
 # Decide on cold/warm depending on intended interpretation
