@@ -9,8 +9,11 @@ import librosa.display
 
 y, sr = librosa.load('..\\..\\assets\\Gonna_Fly_Now.mp3', sr=44100)
 
+start_time_s = 0
+end_time_s = 15
+
 # And compute the spectrogram magnitude and phase
-S_full, phase = librosa.magphase(librosa.stft(y))
+S_full, phase = librosa.magphase(librosa.stft(y[start_time_s*sr:end_time_s*sr]))
 
 # Play back a 5-second excerpt with vocals
 Audio(data=y, rate=sr)
@@ -23,10 +26,9 @@ librosa.display.specshow(librosa.amplitude_to_db(S_full, ref=np.max),
 
 # %%
 # Seperate the harmonic and percussive components
-y_harmonics, y_precussive = librosa.effects.hpss(y, margin=(1.0,5.0))
+y_harmonics, y_precussive = librosa.effects.hpss(y[start_time_s*sr:end_time_s*sr], margin=(1.0,5.0))
 
 # %%
-
 S_percussive, phase = librosa.magphase(librosa.stft(y=y_harmonics))
 S_harmonic, phase = librosa.magphase(librosa.stft(y=y_precussive))
 
@@ -52,11 +54,13 @@ S_harmonic_highs = np.copy(S_harmonic)
 S_harmonic_mediums = np.copy(S_harmonic)
 S_harmonic_lows = np.copy(S_harmonic)
 
+upper_band = 300
+lower_band = 100
 
-S_harmonic_highs[:600, :] = 0.
-S_harmonic_mediums[600:,:] = 0.
-S_harmonic_mediums[:300,:] = 0.
-S_harmonic_lows[300:, :] = 0.
+S_harmonic_highs[:upper_band, :] = 0.
+S_harmonic_mediums[upper_band:,:] = 0.
+S_harmonic_mediums[:lower_band,:] = 0.
+S_harmonic_lows[lower_band:, :] = 0.
 
 layout = [list(".AAAA"), list(".BBBB"), list(".CCCC")]
 fig, ax = plt.subplot_mosaic(layout, constrained_layout=True)
@@ -89,6 +93,9 @@ cent_high = librosa.feature.spectral_centroid(y=y_highs, sr=sr)
 cent_medium = librosa.feature.spectral_centroid(S=S_harmonic_mediums, sr=sr)
 cent_low = librosa.feature.spectral_centroid(S=S_harmonic_lows, sr=sr)
 
+onset_medium =  librosa.onset.onset_strength(S=S_harmonic_mediums, sr=sr)
+onset_low =  librosa.onset.onset_strength(S=S_harmonic_lows , sr=sr)
+
 # %%
 times_high = librosa.times_like(cent_high)
 fig, ax = plt.subplots()
@@ -96,18 +103,57 @@ fig, ax = plt.subplots()
 ax.plot(times_high, cent_high.T, label='Spectral centroid', color='b')
 ax.legend(loc='upper right')
 ax.set(title='Spectral centroid for highs')
-# %%
+
 times_medium = librosa.times_like(cent_medium)
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(2)
 
-ax.plot(times_medium, cent_medium.T, label='Spectral centroid', color='b')
-ax.legend(loc='upper right')
-ax.set(title='Spectral centroid for mediums')
+ax[0].plot(times_medium, cent_medium.T, label='Spectral centroid', color='b')
+ax[0].legend(loc='upper right')
+ax[0].set(title='Spectral centroid for mediums')
+
+ax[1].plot(times_medium, onset_medium.T, label='Attack', color='b')
+ax[1].legend(loc='upper right')
+ax[1].set(title='Attack for mediums')
+
+times_low = librosa.times_like(cent_low)
+fig, ax = plt.subplots(2)
+
+ax[0].plot(times_low, cent_low.T, label='Spectral centroid', color='b')
+ax[0].legend(loc='upper right')
+ax[0].set(title='Spectral centroid for lows')
+ax[1].plot(times_low, onset_low.T, label='Attack', color='b')
+ax[1].legend(loc='upper right')
+ax[1].set(title='Attack for lows')
 
 # %%
-times_low = librosa.times_like(cent_low)
-fig, ax = plt.subplots()
+# Transform features into time series that can be interpreteded as haptics
+reference_max = 40
+reference_min = 20
 
-ax.plot(times_low, cent_low.T, label='Spectral centroid', color='b')
-ax.legend(loc='upper right')
-ax.set(title='Spectral centroid for lows')
+def normalise(signal, ref_max = reference_max, ref_min = reference_min):
+    max = np.max(signal)
+    min = np.min(signal)
+    difference = max - min
+    reference_diff = ref_max - ref_min
+    return reference_diff * ((signal - min) / (difference)) + ref_min
+
+fig, ax = plt.subplots(3)
+normalised_cent_low = normalise(cent_low)
+normalised_onset_low = normalise(onset_low, 1, 0)
+
+binary_masked_onset_low = (normalised_onset_low > 0.3).astype(int)
+
+ax[0].plot(times_low, normalised_cent_low.T, label='Spectral centroid normalised', color='b')
+ax[0].legend(loc='upper right')
+ax[0].set(title='Normalised spectral centroid for lows')
+ax[1].plot(times_low, normalised_onset_low.T, label='Attack', color='b')
+ax[1].legend(loc='upper right')
+ax[1].set(title='Attack for lows')
+ax[2].plot(times_low, binary_masked_onset_low.T, label='Attack', color='b')
+ax[2].legend(loc='upper right')
+ax[2].set(title='binary Attack for lows')
+    
+
+
+# %%
+# Decide on cold/warm depending on intended interpretation
