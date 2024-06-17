@@ -127,8 +127,8 @@ ax[1].set(title='Attack for lows')
 
 # %%
 # Transform features into time series that can be interpreteded as haptics
-reference_max = 40
-reference_min = 20
+reference_max = 255
+reference_min = 0
 
 def normalise(signal, ref_max = reference_max, ref_min = reference_min):
     max = np.max(signal)
@@ -170,3 +170,15 @@ ax[3].set(title='shifted binary Attack for lows')
 
 # %%
 # Decide on cold/warm depending on intended interpretation
+
+# Specify the file name
+file_name = '../../outputs/centroid_low.txt'
+
+# Write the array to the text file
+with open(file_name, 'w') as file:
+    normalised_cent_low.tofile(file, sep=',', format='%i')
+
+
+print(f"Array written to {file_name}")
+
+# %%
