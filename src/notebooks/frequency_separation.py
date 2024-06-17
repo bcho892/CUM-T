@@ -140,7 +140,9 @@ def normalise(signal, ref_max = reference_max, ref_min = reference_min):
 fig, ax = plt.subplots(4)
 normalised_cent_low = normalise(cent_low)
 normalised_onset_low = normalise(onset_low, 1, 0)
+normalised_onset_medium = normalise(onset_medium, 255, 0)
 
+    
 binary_masked_onset_low = (normalised_onset_low > 0.5).astype(int)
 def shift(arr, amount):
 
@@ -154,6 +156,12 @@ def shift(arr, amount):
     return new_arr
     
 shifted_binary_masked_onset_low = shift(binary_masked_onset_low, -50)
+
+shifted_binary_masked_onset_medium = shift(normalised_onset_medium, -100)
+fig, ax = plt.subplots(2)
+ax[0].plot(times_medium, shifted_binary_masked_onset_medium.T, label='Onset normalised', color='b')
+ax[0].legend(loc='upper right')
+ax[0].set(title='Normalised onset for mediums')
 
 ax[0].plot(times_low, normalised_cent_low.T, label='Spectral centroid normalised', color='b')
 ax[0].legend(loc='upper right')
