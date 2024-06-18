@@ -127,7 +127,7 @@ ax[1].set(title='Attack for lows')
 
 # %%
 # Transform features into time series that can be interpreteded as haptics
-reference_max = 255
+reference_max = 2**16 - 1
 reference_min = 0
 
 def normalise(signal, ref_max = reference_max, ref_min = reference_min):
@@ -137,10 +137,10 @@ def normalise(signal, ref_max = reference_max, ref_min = reference_min):
     reference_diff = ref_max - ref_min
     return reference_diff * ((signal - min) / (difference)) + ref_min
 
-fig, ax = plt.subplots(4)
 normalised_cent_low = normalise(cent_low)
 normalised_onset_low = normalise(onset_low, 1, 0)
-normalised_onset_medium = normalise(onset_medium, 255, 0)
+normalised_onset_medium = normalise(onset_medium)
+normalised_cent_high = normalise(cent_high[cent_high != 0])
 
     
 binary_masked_onset_low = (normalised_onset_low > 0.5).astype(int)
@@ -158,11 +158,12 @@ def shift(arr, amount):
 shifted_binary_masked_onset_low = shift(binary_masked_onset_low, -50)
 
 shifted_binary_masked_onset_medium = shift(normalised_onset_medium, -100)
-fig, ax = plt.subplots(2)
-ax[0].plot(times_medium, shifted_binary_masked_onset_medium.T, label='Onset normalised', color='b')
-ax[0].legend(loc='upper right')
-ax[0].set(title='Normalised onset for mediums')
+fig, ax = plt.subplots(1,1)
+ax.plot(times_medium, shifted_binary_masked_onset_medium.T, label='Onset normalised', color='b')
+ax.legend(loc='upper right')
+ax.set(title='Normalised onset for mediums')
 
+fig, ax = plt.subplots(4)
 ax[0].plot(times_low, normalised_cent_low.T, label='Spectral centroid normalised', color='b')
 ax[0].legend(loc='upper right')
 ax[0].set(title='Normalised spectral centroid for lows')
@@ -176,17 +177,31 @@ ax[3].plot(times_low, shifted_binary_masked_onset_low.T, label='Attack', color='
 ax[3].legend(loc='upper right')
 ax[3].set(title='shifted binary Attack for lows')
 
+fig, ax = plt.subplots(1,1)
+
+ax.plot(times_high, normalised_cent_high.T, label='Centroid normalised', color='b')
+ax.legend(loc='upper right')
+ax.set(title='Normalised onset for highs')
+
 # %%
 # Decide on cold/warm depending on intended interpretation
 
+def write_array_to_file(file_name, normalised_array):
+    with open(file_name, 'w') as file:
+        normalised_array.tofile(file, sep=',', format='%i')
+    print(f"Array written to {file_name}")
+
 # Specify the file name
-file_name = '../../outputs/centroid_low.txt'
-
-# Write the array to the text file
-with open(file_name, 'w') as file:
-    normalised_cent_low.tofile(file, sep=',', format='%i')
+centroid_low_file_name = '../../outputs/centroid_low.txt'
+write_array_to_file(centroid_low_file_name, normalised_cent_low)
 
 
-print(f"Array written to {file_name}")
+onset_medium_file_name = "../../outputs/onset_med.txt"
+write_array_to_file(onset_medium_file_name, normalised_onset_medium)
+
+
+centroid_high_file_name = "../../outputs/centroid_high.txt"
+write_array_to_file(centroid_high_file_name, normalised_cent_high)
+
 
 # %%
