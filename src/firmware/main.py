@@ -1,6 +1,11 @@
 from machine import Pin
-from time import sleep
+from time import sleep 
 from peltier_h_bridge import PeltierHBridge, H_BRIDGE_NORMAL, H_BRIDGE_REVERSE
+
+import wifi
+
+from ws_connection import ClientClosedError
+from ws_server import WebSocketServer, WebSocketClient
 
 
 led = Pin("LED", Pin.OUT)
@@ -8,43 +13,36 @@ led.on()
 
 peltiers_set_1 = PeltierHBridge(17,18,16,19,20,21)
 
-def temperature_duty(percent:int): 
-    return (percent/100)*65565 
+class TestClient(WebSocketClient):
+    def __init__(self, conn):
+        super().__init__(conn)
+
+    def process(self):
+        try:
+            msg = self.connection.read()
+            if not msg:
+                return
+            msg = msg.decode("utf-8")
+            msg = msg.split("\n")[-2]
+            msg = msg.split(" ")
+            
+            peltiers_set_1.set_temperature(int(msg[0]), int(msg[1]))
+            
+        except ClientClosedError:
+            print("Connection close error")
+            self.connection.close()
+
+class TestServer(WebSocketServer):
+    def __init__(self):
+        super().__init__("index.html", 100)
+
+    def _make_client(self, conn):
+        return TestClient(conn)
+
+wifi.run()
+
+server = TestServer()
+server.start()
 
 while True:
-    
-    # Hot increase
-    peltiers_set_1.set_operation_mode(H_BRIDGE_NORMAL, H_BRIDGE_NORMAL)
-
-    for cock in range(0, 65565, 2000):
-        peltiers_set_1.set_temperature(cock, cock)
-        sleep(0.1)
-
-
-    # Hold
-    sleep(1)
-
-    # Hot decrease
-    for cock in range(65565, 0, -2000):
-        peltiers_set_1.set_temperature(cock, cock)
-        sleep(0.1)
-
-    sleep(1)
-
-    peltiers_set_1.set_operation_mode(H_BRIDGE_REVERSE, H_BRIDGE_REVERSE)
-
-    # Cold decrease
-    for cock in range(0, 65565, 2000):
-        peltiers_set_1.set_temperature(cock, cock)
-        sleep(0.1)
-
-    # Hold
-    sleep(1)
-
-    # Cold decrease
-    for cock in range(65565, 0, -2000):
-        peltiers_set_1.set_temperature(cock, cock)
-        sleep(0.1)
-
-    # Hold
-    sleep(1)
+    server.process_all()
