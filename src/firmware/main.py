@@ -22,11 +22,16 @@ class TestClient(WebSocketClient):
             msg = self.connection.read()
             if not msg:
                 return
-            msg = msg.decode("utf-8")
-            msg = msg.split("\n")[-2]
-            msg = msg.split(" ")
-            
-            peltiers_set_1.set_temperature(int(msg[0]), int(msg[1]))
+            print(msg)
+            msg = msg.decode('ascii')
+            parts = msg.split('\n')
+
+            dirs = parts[0].split(' ')
+            peltiers_set_1.set_operation_mode(int(dirs[0]), int(dirs[1]))
+
+            temps = parts[1].split(' ')
+            peltiers_set_1.set_temperature(int(temps[0]), int(temps[1]))
+                
             
         except ClientClosedError:
             print("Connection close error")

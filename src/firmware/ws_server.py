@@ -3,7 +3,7 @@ import socket
 import network
 import websocket_helper
 from time import sleep
-from ws_connection import WebSocketConnection, ClientClosedError
+from ws_connection import WebSocketConnection 
 
 
 class WebSocketClient:
