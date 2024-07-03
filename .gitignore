@@ -1,3 +1,5 @@
 assets/
 outputs/
 pico-sdk/
+*.pdf
+*.gz

@@ -13,9 +13,15 @@ export interface TemperatureMessage extends Message {
    */
   peltier1Value: number;
   peltier2Value: number;
+  peltier3Value: number;
+  peltier4Value: number;
+  peltier5Value: number;
 }
 
 export interface DirectionMessage extends Message {
   peltier1Direction: Direction;
   peltier2Direction: Direction;
+  peltier3Direction: Direction;
+  peltier4Direction: Direction;
+  peltier5Direction: Direction;
 }
