@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import TemperatureGraph from "@/components/wrappers/TemperatureGraph/TemperatureGraph";
 import { TemperatureDataContext } from "@/context/TemperatureDataContext";
 import { to2Dp } from "@/lib/utils";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 const MS_IN_SECOND = 1000 as const;
 
@@ -24,6 +24,12 @@ const Visualisation = () => {
     deltaT,
     setDeltaT,
   } = useContext(TemperatureDataContext);
+
+  const inferDeltaT = useCallback(() => {
+    if (temperatureValues.length > 1) {
+      setDeltaT?.(temperatureValues[1].time - temperatureValues[0].time);
+    }
+  }, [temperatureValues, setDeltaT]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -49,6 +55,7 @@ const Visualisation = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
+      <h2>Visualise the temperature over time</h2>
       {temperatureValues.length > 0 ? (
         <TemperatureGraph
           data={temperatureValues}
@@ -88,7 +95,7 @@ const Visualisation = () => {
             onChange={(e) => setDeltaT?.(e.target.valueAsNumber)}
             type="number"
             min={0}
-            defaultValue={0.05}
+            value={deltaT}
             id="timestep-input"
           />
         </span>
@@ -105,6 +112,7 @@ const Visualisation = () => {
           onClick={() => {
             if (rawTemperatureJson) {
               setTemperatureValues?.(JSON.parse(rawTemperatureJson));
+              inferDeltaT();
               setIsPlaying?.(true);
             }
           }}

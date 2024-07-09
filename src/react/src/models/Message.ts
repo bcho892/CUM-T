@@ -1,10 +1,7 @@
+import { Direction } from "@/utils/PeltierUtils";
+
 interface Message {
   prefix: string;
-}
-
-export enum Direction {
-  REVERSE = 2,
-  FORWARD = 3,
 }
 
 export interface TemperatureMessage extends Message {

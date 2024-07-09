@@ -2,31 +2,30 @@ import { useCallback, useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import Logo from "../assets/logo.png";
-import {
-  Direction,
-  DirectionMessage,
-  TemperatureMessage,
-} from "../models/Message";
+import { DirectionMessage, TemperatureMessage } from "../models/Message";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import WebsocketUtils from "@/utils/WebsocketUtils";
+import PeltierUtils, { Direction } from "@/utils/PeltierUtils";
 
-const SOCKET_URL = "ws://192.168.4.1:80";
+const DEFAULT_PELTIER_VALUE = 0 as const;
 
 function ManualTesting() {
-  const { sendMessage, readyState } = useWebSocket(SOCKET_URL, {
+  const { sendMessage, readyState } = useWebSocket(WebsocketUtils.SOCKET_URL, {
     reconnectAttempts: 10,
     reconnectInterval: 3000,
+    share: true,
   });
 
   const [currentTemperatureMessage, setCurrentTemperatureMessage] =
     useState<TemperatureMessage>({
       prefix: "temp",
-      peltier1Value: 0,
-      peltier2Value: 0,
-      peltier3Value: 0,
-      peltier4Value: 0,
-      peltier5Value: 0,
+      peltier1Value: DEFAULT_PELTIER_VALUE,
+      peltier2Value: DEFAULT_PELTIER_VALUE,
+      peltier3Value: DEFAULT_PELTIER_VALUE,
+      peltier4Value: DEFAULT_PELTIER_VALUE,
+      peltier5Value: DEFAULT_PELTIER_VALUE,
     });
 
   const [currentDirectionMessage, setCurrentDirectionMessage] =
@@ -72,24 +71,23 @@ function ManualTesting() {
     peltier5Value,
   ]);
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
+  const connectionStatus = WebsocketUtils.connectionStatus[readyState];
 
   return (
-    <div className="flex flex-col items-center gap-2 w-full">
-      <h1>Testing</h1>
-      <img src={Logo} />
-      <div className="grid grid-cols-1">
+    <div className="flex flex-col gap-2 w-full">
+      <h1>Manual Testing</h1>
+      <p>Set the desired configuration of the peltiers manually here</p>
+      <span className="h-auto w-[500px]">
+        {" "}
+        <img src={Logo} />
+      </span>
+      <div className="grid grid-cols-1 w-full">
+        <h2>Temperature Configuration</h2>
         <span>
           <Label htmlFor="peltier-1-value">Peltier 1 Value</Label>
           <Slider
-            min={0}
-            max={65565}
+            min={PeltierUtils.PELTIER_MIN_VALUE}
+            max={PeltierUtils.PELTIER_MAX_VALUE}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -103,8 +101,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-2-value">Peltier 2 Value</Label>
           <Slider
-            min={0}
-            max={65565}
+            min={PeltierUtils.PELTIER_MIN_VALUE}
+            max={PeltierUtils.PELTIER_MAX_VALUE}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -118,8 +116,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-3-value">Peltier 3 Value</Label>
           <Slider
-            min={0}
-            max={65565}
+            min={PeltierUtils.PELTIER_MIN_VALUE}
+            max={PeltierUtils.PELTIER_MAX_VALUE}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -133,8 +131,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-4-value">Peltier 4 Value</Label>
           <Slider
-            min={0}
-            max={65565}
+            min={PeltierUtils.PELTIER_MIN_VALUE}
+            max={PeltierUtils.PELTIER_MAX_VALUE}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -148,8 +146,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-5-value">Peltier 5 Value</Label>
           <Slider
-            min={0}
-            max={65565}
+            min={PeltierUtils.PELTIER_MIN_VALUE}
+            max={PeltierUtils.PELTIER_MAX_VALUE}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -166,7 +164,6 @@ function ManualTesting() {
       </span>
 
       <span>
-        <Label htmlFor="peltier-1-direction">Peltier 1 Direction</Label>
         <Checkbox
           id="peltier-1-direction"
           onCheckedChange={(checked) =>
@@ -178,10 +175,10 @@ function ManualTesting() {
             })
           }
         />
+        <Label htmlFor="peltier-1-direction">Peltier 1 Direction</Label>
       </span>
 
       <span>
-        <Label htmlFor="peltier-2-direction">Peltier 2 Direction</Label>
         <Checkbox
           id="peltier-2-direction"
           onCheckedChange={(checked) =>
@@ -193,10 +190,10 @@ function ManualTesting() {
             })
           }
         />
+        <Label htmlFor="peltier-2-direction">Peltier 2 Direction</Label>
       </span>
 
       <span>
-        <Label htmlFor="peltier-3-direction">Peltier 3 Direction</Label>
         <Checkbox
           id="peltier-3-direction"
           onCheckedChange={(checked) =>
@@ -208,10 +205,10 @@ function ManualTesting() {
             })
           }
         />
+        <Label htmlFor="peltier-3-direction">Peltier 3 Direction</Label>
       </span>
 
       <span>
-        <Label htmlFor="peltier-4-direction">Peltier 4 Direction</Label>
         <Checkbox
           id="peltier-4-direction"
           onCheckedChange={(checked) =>
@@ -223,10 +220,10 @@ function ManualTesting() {
             })
           }
         />
+        <Label htmlFor="peltier-4-direction">Peltier 4 Direction</Label>
       </span>
 
       <span>
-        <Label htmlFor="peltier-5-direction">Peltier 5 Direction</Label>
         <Checkbox
           id="peltier-5-direction"
           onChange={(checked) =>
@@ -238,6 +235,7 @@ function ManualTesting() {
             })
           }
         />
+        <Label htmlFor="peltier-5-direction">Peltier 5 Direction</Label>
       </span>
 
       <span className="flex font-bold">
