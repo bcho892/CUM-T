@@ -7,7 +7,11 @@ function App() {
     <>
       <BrowserRouter>
         <AppNavbar />
-        <AppRoutes />
+        <div className="flex flex-col w-full items-center">
+          <div className="max-w-[1100px] w-full pt-8">
+            <AppRoutes />
+          </div>
+        </div>
       </BrowserRouter>
     </>
   );

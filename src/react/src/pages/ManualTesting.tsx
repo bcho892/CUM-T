@@ -9,6 +9,7 @@ import {
 } from "../models/Message";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const SOCKET_URL = "ws://192.168.4.1:80";
 
@@ -85,7 +86,7 @@ function ManualTesting() {
       <img src={Logo} />
       <div className="grid grid-cols-1">
         <span>
-          <label htmlFor="peltier-1-value">Peltier 1 Value</label>
+          <Label htmlFor="peltier-1-value">Peltier 1 Value</Label>
           <Slider
             min={0}
             max={65565}
@@ -100,7 +101,7 @@ function ManualTesting() {
         </span>
 
         <span>
-          <label htmlFor="peltier-2-value">Peltier 2 Value</label>
+          <Label htmlFor="peltier-2-value">Peltier 2 Value</Label>
           <Slider
             min={0}
             max={65565}
@@ -115,7 +116,7 @@ function ManualTesting() {
         </span>
 
         <span>
-          <label htmlFor="peltier-3-value">Peltier 3 Value</label>
+          <Label htmlFor="peltier-3-value">Peltier 3 Value</Label>
           <Slider
             min={0}
             max={65565}
@@ -130,7 +131,7 @@ function ManualTesting() {
         </span>
 
         <span>
-          <label htmlFor="peltier-4-value">Peltier 4 Value</label>
+          <Label htmlFor="peltier-4-value">Peltier 4 Value</Label>
           <Slider
             min={0}
             max={65565}
@@ -145,7 +146,7 @@ function ManualTesting() {
         </span>
 
         <span>
-          <label htmlFor="peltier-5-value">Peltier 5 Value</label>
+          <Label htmlFor="peltier-5-value">Peltier 5 Value</Label>
           <Slider
             min={0}
             max={65565}
@@ -165,7 +166,7 @@ function ManualTesting() {
       </span>
 
       <span>
-        <label htmlFor="peltier-1-direction">Peltier 1 Direction</label>
+        <Label htmlFor="peltier-1-direction">Peltier 1 Direction</Label>
         <Checkbox
           id="peltier-1-direction"
           onCheckedChange={(checked) =>
@@ -180,7 +181,7 @@ function ManualTesting() {
       </span>
 
       <span>
-        <label htmlFor="peltier-2-direction">Peltier 2 Direction</label>
+        <Label htmlFor="peltier-2-direction">Peltier 2 Direction</Label>
         <Checkbox
           id="peltier-2-direction"
           onCheckedChange={(checked) =>
@@ -195,7 +196,7 @@ function ManualTesting() {
       </span>
 
       <span>
-        <label htmlFor="peltier-3-direction">Peltier 3 Direction</label>
+        <Label htmlFor="peltier-3-direction">Peltier 3 Direction</Label>
         <Checkbox
           id="peltier-3-direction"
           onCheckedChange={(checked) =>
@@ -210,7 +211,7 @@ function ManualTesting() {
       </span>
 
       <span>
-        <label htmlFor="peltier-4-direction">Peltier 4 Direction</label>
+        <Label htmlFor="peltier-4-direction">Peltier 4 Direction</Label>
         <Checkbox
           id="peltier-4-direction"
           onCheckedChange={(checked) =>
@@ -225,7 +226,7 @@ function ManualTesting() {
       </span>
 
       <span>
-        <label htmlFor="peltier-5-direction">Peltier 5 Direction</label>
+        <Label htmlFor="peltier-5-direction">Peltier 5 Direction</Label>
         <Checkbox
           id="peltier-5-direction"
           onChange={(checked) =>
