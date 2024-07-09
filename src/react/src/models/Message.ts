@@ -25,3 +25,8 @@ export interface DirectionMessage extends Message {
   peltier4Direction: Direction;
   peltier5Direction: Direction;
 }
+
+/**
+ * Format: Temperature Configs (derived from `TemperatureMessage` type)\n Direction Configs
+ */
+export type ConfigMessage = `${string}\n${string}`;

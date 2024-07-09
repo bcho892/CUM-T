@@ -49,17 +49,18 @@ const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
         )}
 
         <CartesianGrid stroke="#f5f5f5" />
-        {Object.keys(data[0]).map((key, index) => {
-          if (key === "time") return null;
-          return (
-            <Line
-              type="monotone"
-              dataKey={key}
-              stroke={STROKES[index]}
-              isAnimationActive={false}
-            />
-          );
-        })}
+        {data[0] &&
+          Object.keys(data[0]).map((key, index) => {
+            if (key === "time") return null;
+            return (
+              <Line
+                type="monotone"
+                dataKey={key}
+                stroke={STROKES[index]}
+                isAnimationActive={false}
+              />
+            );
+          })}
       </LineChart>
     </ResponsiveContainer>
   );

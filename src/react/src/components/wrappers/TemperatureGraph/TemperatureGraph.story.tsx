@@ -22,9 +22,9 @@ for (let i = 0; i < 50; ++i) {
   mockData.push({
     time: Math.round(i * DELTA_T * 100) / 100,
     peltier1Value: Math.random() * MAX_VALUE,
-    peltier2Value: Math.random() * MAX_VALUE,
+    peltier2Value: -Math.random() * MAX_VALUE,
     peltier3Value: Math.random() * MAX_VALUE,
-    peltier4Value: Math.random() * MAX_VALUE,
+    peltier4Value: -Math.random() * MAX_VALUE,
     peltier5Value: Math.random() * MAX_VALUE,
   });
 }
@@ -47,14 +47,12 @@ export const TemperatureGraphWithChangableTime = () => {
 
   return (
     <>
-      <span>
-        <Slider
-          onValueChange={(value) => setCurrentTime(value[0])}
-          min={0}
-          max={DELTA_T * mockData.length}
-          step={DELTA_T}
-        />
-      </span>
+      <Slider
+        onValueChange={(value) => setCurrentTime(value[0])}
+        min={0}
+        max={DELTA_T * mockData.length}
+        step={DELTA_T}
+      />
       <TemperatureGraph data={mockData} currentTimestamp={currentTime} />
     </>
   );
