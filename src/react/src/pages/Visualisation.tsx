@@ -3,45 +3,57 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import TemperatureGraph from "@/components/wrappers/TemperatureGraph/TemperatureGraph";
-import { TemperatureGraphDataPoint } from "@/models/Graph";
-import { useEffect, useState } from "react";
+import { TemperatureDataContext } from "@/context/TemperatureDataContext";
+import { useContext, useEffect, useState } from "react";
 
-const DEFAULT_DELTA_T = 0.05 as const;
 const MS_IN_SECOND = 1000 as const;
 
 const Visualisation = () => {
-  const [graphData, setGraphData] = useState<TemperatureGraphDataPoint[]>([]);
-  const [currentProfile, setCurrentProfile] = useState<string | undefined>(
-    undefined,
-  );
+  const [rawTemperatureJson, setRawTemperatureJson] = useState<
+    string | undefined
+  >(undefined);
 
-  const [deltaT, setDeltaT] = useState<number>(DEFAULT_DELTA_T);
-
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-  const [start, setStart] = useState<boolean>(false);
+  const {
+    temperatureValues,
+    setTemperatureValues,
+    currentTemperatureIndex,
+    setCurrentTemperatureIndex,
+    isPlaying,
+    setIsPlaying,
+    deltaT,
+    setDeltaT,
+  } = useContext(TemperatureDataContext);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (start) {
+    if (isPlaying) {
       interval = setInterval(() => {
-        if (currentIndex < graphData.length - 1) {
-          setCurrentIndex(currentIndex + 1);
+        if (currentTemperatureIndex < temperatureValues.length - 1) {
+          setCurrentTemperatureIndex?.(currentTemperatureIndex + 1);
         } else {
-          setCurrentIndex(0);
-          setStart(false);
+          setCurrentTemperatureIndex?.(0);
+          setIsPlaying?.(false);
         }
       }, deltaT * MS_IN_SECOND);
     }
     return () => clearInterval(interval);
-  }, [currentIndex, start, deltaT, graphData]);
+  }, [
+    currentTemperatureIndex,
+    isPlaying,
+    deltaT,
+    temperatureValues,
+    setCurrentTemperatureIndex,
+    setIsPlaying,
+  ]);
 
   return (
     <div className="w-full flex flex-col gap-4">
-      {graphData.length > 0 ? (
+      {temperatureValues.length > 0 ? (
         <TemperatureGraph
-          data={graphData}
-          currentTimestamp={Math.round(currentIndex * deltaT * 100) / 100}
+          data={temperatureValues}
+          currentTimestamp={
+            Math.round(currentTemperatureIndex * deltaT * 100) / 100
+          }
         />
       ) : (
         <>
@@ -59,7 +71,7 @@ const Visualisation = () => {
             onChange={(e) => {
               const reader = new FileReader();
               reader.onload = (e) => {
-                setCurrentProfile(e.target?.result as string);
+                setRawTemperatureJson(e.target?.result as string);
               };
               if (e.target.files) {
                 reader.readAsText(e.target?.files[0]);
@@ -71,7 +83,7 @@ const Visualisation = () => {
         <span>
           <Label htmlFor="timestep-input">Set Timestep</Label>
           <Input
-            onChange={(e) => setDeltaT(e.target.valueAsNumber)}
+            onChange={(e) => setDeltaT?.(e.target.valueAsNumber)}
             type="number"
             min={0}
             defaultValue={0.05}
@@ -82,24 +94,24 @@ const Visualisation = () => {
 
       <Textarea
         placeholder="No temperature profile JSON"
-        value={currentProfile}
+        value={rawTemperatureJson}
         disabled
       />
       <span className="gap-2 flex">
         <Button
-          disabled={!currentProfile || start}
+          disabled={!temperatureValues || isPlaying}
           onClick={() => {
-            if (currentProfile) {
-              setGraphData(JSON.parse(currentProfile));
-              setStart(true);
+            if (rawTemperatureJson) {
+              setTemperatureValues?.(JSON.parse(rawTemperatureJson));
+              setIsPlaying?.(true);
             }
           }}
         >
           Start
         </Button>
         <Button
-          disabled={!!currentProfile && !start}
-          onClick={() => setStart(false)}
+          disabled={!!temperatureValues && !isPlaying}
+          onClick={() => setIsPlaying?.(false)}
         >
           Stop
         </Button>
