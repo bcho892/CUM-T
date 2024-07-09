@@ -1,10 +1,11 @@
 import { TemperatureMessage } from "@/models/Message";
-import { useMemo } from "react";
 import {
   CartesianGrid,
   Legend,
   Line,
   LineChart,
+  ReferenceLine,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -12,6 +13,7 @@ import {
 
 interface ITemperatureGraph {
   data: (Omit<TemperatureMessage, "prefix"> & { time: number })[];
+  currentTimestamp?: number;
 }
 
 const STROKES = [
@@ -22,25 +24,28 @@ const STROKES = [
   "#4B543B",
 ] as const;
 
-const TemperatureGraph = ({ data }: ITemperatureGraph) => {
+const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
   return (
-    <LineChart
-      width={800}
-      height={400}
-      data={data}
-      margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-    >
-      <XAxis dataKey={"time"} />
-      <Legend verticalAlign="top" height={36} />
-      <Tooltip />
-      <YAxis />
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart
+        data={data}
+        margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+      >
+        <XAxis dataKey={"time"} />
+        <Legend verticalAlign="top" height={36} />
+        <Tooltip />
+        <YAxis />
+        {currentTimestamp && (
+          <ReferenceLine x={currentTimestamp} stroke="red" />
+        )}
 
-      <CartesianGrid stroke="#f5f5f5" />
-      {Object.keys(data[0]).map((key, index) => {
-        if (key === "time") return null;
-        return <Line type="monotone" dataKey={key} stroke={STROKES[index]} />;
-      })}
-    </LineChart>
+        <CartesianGrid stroke="#f5f5f5" />
+        {Object.keys(data[0]).map((key, index) => {
+          if (key === "time") return null;
+          return <Line type="monotone" dataKey={key} stroke={STROKES[index]} />;
+        })}
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 

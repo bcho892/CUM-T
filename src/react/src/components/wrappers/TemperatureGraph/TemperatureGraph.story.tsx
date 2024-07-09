@@ -26,8 +26,15 @@ for (let i = 0; i < 50; ++i) {
   });
 }
 
-export const Primary: Story = {
+export const DefaultTemperatureGraph: Story = {
   args: {
     data: mockData,
+  },
+};
+
+export const TemperatureGraphWithTime: Story = {
+  args: {
+    data: mockData,
+    currentTimestamp: 0.5,
   },
 };
