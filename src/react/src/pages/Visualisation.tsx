@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import TemperatureGraph from "@/components/wrappers/TemperatureGraph/TemperatureGraph";
 import { TemperatureDataContext } from "@/context/TemperatureDataContext";
+import { to2Dp } from "@/lib/utils";
 import { useContext, useEffect, useState } from "react";
 
 const MS_IN_SECOND = 1000 as const;
@@ -52,7 +53,8 @@ const Visualisation = () => {
         <TemperatureGraph
           data={temperatureValues}
           currentTimestamp={
-            Math.round(currentTemperatureIndex * deltaT * 100) / 100
+            // Calculate the value on the x axis the guide line should be at
+            to2Dp(currentTemperatureIndex * deltaT)
           }
         />
       ) : (
