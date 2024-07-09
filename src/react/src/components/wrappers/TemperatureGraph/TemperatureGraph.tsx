@@ -1,6 +1,7 @@
 import { TemperatureGraphDataPoint } from "@/models/Graph";
 import {
   CartesianGrid,
+  Label,
   Legend,
   Line,
   LineChart,
@@ -36,10 +37,14 @@ const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
           dataKey={"time"}
           unit={"s"}
           interval={"equidistantPreserveStart"}
-        />
+        >
+          <Label value={"Time"} />
+        </XAxis>
         <Legend verticalAlign="top" height={36} />
         <Tooltip />
-        <YAxis />
+        <YAxis>
+          <Label angle={270} value={"Temperature"} />
+        </YAxis>
         {currentTimestamp && (
           <ReferenceLine
             ifOverflow="visible"
@@ -47,6 +52,12 @@ const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
             stroke="red"
           />
         )}
+        <ReferenceLine
+          stroke="black"
+          y={0}
+          ifOverflow="visible"
+          strokeWidth={2}
+        />
 
         <CartesianGrid stroke="#f5f5f5" />
         {data[0] &&

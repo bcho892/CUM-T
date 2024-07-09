@@ -6,18 +6,43 @@ import TemperatureGraph from "@/components/wrappers/TemperatureGraph/Temperature
 import { TemperatureGraphDataPoint } from "@/models/Graph";
 import { useEffect, useState } from "react";
 
+const DEFAULT_DELTA_T = 0.05 as const;
+const MS_IN_SECOND = 1000 as const;
+
 const Visualisation = () => {
   const [graphData, setGraphData] = useState<TemperatureGraphDataPoint[]>([]);
   const [currentProfile, setCurrentProfile] = useState<string | undefined>(
     undefined,
   );
 
-  useEffect(() => {});
+  const [deltaT, setDeltaT] = useState<number>(DEFAULT_DELTA_T);
+
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+
+  const [start, setStart] = useState<boolean>(false);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (start) {
+      interval = setInterval(() => {
+        if (currentIndex < graphData.length - 1) {
+          setCurrentIndex(currentIndex + 1);
+        } else {
+          setCurrentIndex(0);
+          setStart(false);
+        }
+      }, deltaT * MS_IN_SECOND);
+    }
+    return () => clearInterval(interval);
+  }, [currentIndex, start, deltaT, graphData]);
 
   return (
     <div className="w-full flex flex-col gap-4">
       {graphData.length > 0 ? (
-        <TemperatureGraph data={graphData} />
+        <TemperatureGraph
+          data={graphData}
+          currentTimestamp={Math.round(currentIndex * deltaT * 100) / 100}
+        />
       ) : (
         <>
           <h2>Load a temperature profile</h2>
@@ -42,23 +67,43 @@ const Visualisation = () => {
             }}
           />
         </span>
+
+        <span>
+          <Label htmlFor="timestep-input">Set Timestep</Label>
+          <Input
+            onChange={(e) => setDeltaT(e.target.valueAsNumber)}
+            type="number"
+            min={0}
+            defaultValue={0.05}
+            id="timestep-input"
+          />
+        </span>
       </span>
 
       <Textarea
-        placeholder="Enter the temperature profile"
+        placeholder="No temperature profile JSON"
         value={currentProfile}
         disabled
       />
-      <Button
-        disabled={!currentProfile}
-        onClick={() => {
-          if (currentProfile) {
-            setGraphData(JSON.parse(currentProfile));
-          }
-        }}
-      >
-        Start
-      </Button>
+      <span className="gap-2 flex">
+        <Button
+          disabled={!currentProfile || start}
+          onClick={() => {
+            if (currentProfile) {
+              setGraphData(JSON.parse(currentProfile));
+              setStart(true);
+            }
+          }}
+        >
+          Start
+        </Button>
+        <Button
+          disabled={!!currentProfile && !start}
+          onClick={() => setStart(false)}
+        >
+          Stop
+        </Button>
+      </span>
     </div>
   );
 };
