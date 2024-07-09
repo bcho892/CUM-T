@@ -1,4 +1,4 @@
-import { TemperatureMessage } from "@/models/Message";
+import { TemperatureGraphDataPoint } from "@/models/Graph";
 import {
   CartesianGrid,
   Legend,
@@ -12,7 +12,8 @@ import {
 } from "recharts";
 
 interface ITemperatureGraph {
-  data: (Omit<TemperatureMessage, "prefix"> & { time: number })[];
+  data: TemperatureGraphDataPoint[];
+  deltaT?: number;
   currentTimestamp?: number;
 }
 
@@ -31,18 +32,33 @@ const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
         data={data}
         margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
       >
-        <XAxis dataKey={"time"} />
+        <XAxis
+          dataKey={"time"}
+          unit={"s"}
+          interval={"equidistantPreserveStart"}
+        />
         <Legend verticalAlign="top" height={36} />
         <Tooltip />
         <YAxis />
         {currentTimestamp && (
-          <ReferenceLine x={currentTimestamp} stroke="red" />
+          <ReferenceLine
+            ifOverflow="visible"
+            x={currentTimestamp}
+            stroke="red"
+          />
         )}
 
         <CartesianGrid stroke="#f5f5f5" />
         {Object.keys(data[0]).map((key, index) => {
           if (key === "time") return null;
-          return <Line type="monotone" dataKey={key} stroke={STROKES[index]} />;
+          return (
+            <Line
+              type="monotone"
+              dataKey={key}
+              stroke={STROKES[index]}
+              isAnimationActive={false}
+            />
+          );
         })}
       </LineChart>
     </ResponsiveContainer>
