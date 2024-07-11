@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import ArmHeatmap from "@/components/wrappers/ArmHeatmap/ArmHeatmap";
 import TemperatureGraph from "@/components/wrappers/TemperatureGraph/TemperatureGraph";
 import { TemperatureDataContext } from "@/context/TemperatureDataContext";
 import { to2Dp } from "@/lib/utils";
@@ -70,6 +71,9 @@ const Visualisation = () => {
           <p>Either generate a profile or make your own</p>
         </>
       )}
+
+      <ArmHeatmap />
+
       <span className="flex gap-2 items-end">
         <span>
           <Label htmlFor="upload">Upload File</Label>
@@ -94,6 +98,7 @@ const Visualisation = () => {
           <Input
             onChange={(e) => setDeltaT?.(e.target.valueAsNumber)}
             type="number"
+            step={deltaT}
             min={0}
             value={deltaT}
             id="timestep-input"

@@ -252,7 +252,7 @@ function ManualTesting() {
         Send configuration
       </Button>
 
-      <span>The WebSocket is currently {connectionStatus}</span>
+      <h4>The WebSocket is currently {connectionStatus}</h4>
     </div>
   );
 }

@@ -7,6 +7,7 @@ const Home = () => {
         Tool created to allow for the visualisation and control of the haptic
         sleeve
       </p>
+      <blockquote>Love cocks</blockquote>
     </div>
   );
 };

@@ -18,6 +18,12 @@
   h5 {
     @apply leading-7 [&:not(:first-child)]:mt-6;
   }
+  p {
+    @apply leading-7 [&:not(:first-child)]:mt-6;
+  }
+  blockquote {
+    @apply mt-6 border-l-2 pl-6 italic;
+  }
 }
 
 body {
