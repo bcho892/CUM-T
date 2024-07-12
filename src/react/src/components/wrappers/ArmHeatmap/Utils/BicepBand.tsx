@@ -9,7 +9,7 @@ const BicepBand = ({ opacity, state = "hot" }: IBandSVG) => {
       className={twMerge(
         `${state === "hot" && "fill-red-600"}`,
         `${state === "cold" && "fill-blue-500"}`,
-        `stroke-2 stroke-black`,
+        `stroke-2 stroke-black transition-opacity`,
       )}
       style={{ opacity }}
     />
