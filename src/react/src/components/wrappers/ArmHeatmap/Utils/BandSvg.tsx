@@ -1,4 +1,6 @@
 export interface IBandSVG {
   opacity?: number;
-  state?: "hot" | "cold" | "off";
+  state?: TemperatureState;
 }
+
+export type TemperatureState = "hot" | "cold" | "off";
