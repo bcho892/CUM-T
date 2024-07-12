@@ -42,14 +42,22 @@ const ArmHeatmap = ({ currentTemperatureValues }: Readonly<IArmHeatmap>) => {
   }, [currentTemperatureValues]);
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative flex justify-center">
       <div className="w-full h-auto max-w-[500px] relative">
         <Band top={45} left={270} width={120}>
-          <BicepBand opacity={opacities.zone4} state={states.zone4} />
+          <BicepBand
+            opacity={opacities.zone4}
+            state={states.zone4}
+            labelPosition="right"
+          />
         </Band>
 
         <Band top={10} left={360} width={130}>
-          <BicepBand opacity={opacities.zone5} state={states.zone5} />
+          <BicepBand
+            opacity={opacities.zone5}
+            state={states.zone5}
+            labelPosition="right"
+          />
         </Band>
 
         {/** Set 1 */}

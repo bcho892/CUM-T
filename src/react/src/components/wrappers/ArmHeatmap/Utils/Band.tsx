@@ -23,7 +23,7 @@ interface IBand {
 }
 const Band = ({ top = 0, left = 0, width = 150, children }: IBand) => {
   return (
-    <div className={`absolute`} style={{ left: left, top: top, width: width }}>
+    <div className="absolute" style={{ left: left, top: top, width: width }}>
       {children}
     </div>
   );

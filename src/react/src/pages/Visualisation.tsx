@@ -54,16 +54,16 @@ const Visualisation = () => {
     setIsPlaying,
   ]);
 
+  // Calculate the value on the x axis the guide line should be at
+  const currentTime = to2Dp(currentTemperatureIndex * deltaT);
+
   return (
     <div className="w-full flex flex-col gap-4">
       <h2>Visualise the temperature over time</h2>
       {temperatureValues.length > 0 ? (
         <TemperatureGraph
           data={temperatureValues}
-          currentTimestamp={
-            // Calculate the value on the x axis the guide line should be at
-            to2Dp(currentTemperatureIndex * deltaT)
-          }
+          currentTimestamp={currentTime}
         />
       ) : (
         <>
@@ -72,7 +72,13 @@ const Visualisation = () => {
         </>
       )}
 
-      <ArmHeatmap />
+      <h2>Haptic sleeve temperature zones</h2>
+      <h3>
+        Current time: <strong>{currentTime}</strong>s
+      </h3>
+      <ArmHeatmap
+        currentTemperatureValues={temperatureValues[currentTemperatureIndex]}
+      />
 
       <span className="flex gap-2 items-end">
         <span>
