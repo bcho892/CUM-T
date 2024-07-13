@@ -28,7 +28,7 @@ const BandLabel = ({ labelPosition, show, children }: Readonly<IBandLabel>) => {
             />
             <div
               className={twMerge(
-                "w-20 h-12 border-black border-2 absolute",
+                "w-20 h-12 border-black border-2 absolute flex items-center justify-center gap-2 p-1",
                 `${labelPosition === "left" && "-left-[130px] -top-[99px]"}`,
                 `${labelPosition === "right" && "-right-[130px] -bottom-[99px]"}`,
               )}

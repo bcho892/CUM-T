@@ -8,6 +8,7 @@ const ForearmBand = ({
   opacity = 0.5,
   state = "hot",
   labelPosition = "left",
+  children,
 }: IBandSVG) => {
   return (
     <>
@@ -19,7 +20,9 @@ const ForearmBand = ({
         )}
         style={{ opacity }}
       />
-      <BandLabel show={opacity > 0} labelPosition={labelPosition} />
+      <BandLabel show={opacity > 0} labelPosition={labelPosition}>
+        {children}
+      </BandLabel>
     </>
   );
 };
