@@ -32,6 +32,13 @@ const AppNavbar = () => {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link to="/experience">
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Experience!
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );

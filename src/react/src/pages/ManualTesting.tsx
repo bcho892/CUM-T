@@ -11,6 +11,15 @@ import PeltierUtils, { Direction } from "@/utils/PeltierUtils";
 
 const DEFAULT_PELTIER_VALUE = 0 as const;
 
+const directionName = (direction: Direction) => {
+  switch (direction) {
+    case Direction.REVERSE:
+      return "Reverse";
+    case Direction.FORWARD:
+      return "Forward";
+  }
+};
+
 function ManualTesting() {
   const { sendMessage, readyState } = useWebSocket(WebsocketUtils.SOCKET_URL, {
     reconnectAttempts: 10,
@@ -239,9 +248,11 @@ function ManualTesting() {
       </span>
 
       <span className="flex font-bold">
-        Peltier 1: {peltier1Direction}, Peltier 2: {peltier2Direction}, Peltier
-        3: {peltier3Direction}, Peltier 4: {peltier4Direction}, Peltier 5:{" "}
-        {peltier5Direction}
+        Peltier 1: {directionName(peltier1Direction)}, Peltier 2:{" "}
+        {directionName(peltier2Direction)}, Peltier 3:{" "}
+        {directionName(peltier3Direction)}, Peltier 4:{" "}
+        {directionName(peltier4Direction)}, Peltier 5:{" "}
+        {directionName(peltier5Direction)}
       </span>
 
       <Button
