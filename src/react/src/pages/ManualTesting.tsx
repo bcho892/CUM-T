@@ -235,14 +235,14 @@ function ManualTesting() {
       <span>
         <Checkbox
           id="peltier-5-direction"
-          onChange={(checked) =>
+          onCheckedChange={(checked) => {
             setCurrentDirectionMessage({
               ...currentDirectionMessage,
               peltier5Direction: checked
                 ? Direction.FORWARD
                 : Direction.REVERSE,
-            })
-          }
+            });
+          }}
         />
         <Label htmlFor="peltier-5-direction">Peltier 5 Direction</Label>
       </span>

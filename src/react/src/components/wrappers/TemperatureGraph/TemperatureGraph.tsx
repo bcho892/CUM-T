@@ -42,9 +42,7 @@ const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
         </XAxis>
         <Legend verticalAlign="top" height={36} />
         <Tooltip />
-        <YAxis>
-          <Label angle={270} value={"Temperature"} />
-        </YAxis>
+        <YAxis unit={"%"} />
         {currentTimestamp && (
           <ReferenceLine
             ifOverflow="visible"
