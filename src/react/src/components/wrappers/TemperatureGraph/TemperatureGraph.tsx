@@ -63,7 +63,7 @@ const TemperatureGraph = ({ data, currentTimestamp }: ITemperatureGraph) => {
             if (key === "time") return null;
             return (
               <Line
-                type="monotone"
+                type="stepAfter"
                 dataKey={key}
                 stroke={STROKES[index]}
                 isAnimationActive={false}

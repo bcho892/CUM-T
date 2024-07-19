@@ -1,5 +1,5 @@
 const PeltierUtils = {
-  PELTIER_MAX_VALUE: 65565,
+  PELTIER_MAX_VALUE: 100,
   PELTIER_MIN_VALUE: 0,
 } as const;
 
