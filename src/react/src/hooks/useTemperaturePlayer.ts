@@ -3,7 +3,9 @@ import { useContext, useEffect } from "react";
 
 const MS_IN_SECOND = 1000 as const;
 
-export const useTemperaturePlayer = (callback?: () => void) => {
+export const useTemperaturePlayer = (
+  callback?: (isPlaying: boolean) => void,
+) => {
   const {
     temperatureValues,
     currentTemperatureIndex,
@@ -18,12 +20,13 @@ export const useTemperaturePlayer = (callback?: () => void) => {
       interval = setInterval(() => {
         if (currentTemperatureIndex < temperatureValues.length - 1) {
           setCurrentTemperatureIndex?.(currentTemperatureIndex + 1);
+          // Mostly to update the temperature values on peltiers
+          callback?.(true);
         } else {
           setCurrentTemperatureIndex?.(0);
           setIsPlaying?.(false);
+          callback?.(false);
         }
-        // Mostly to update the temperature values on peltiers
-        callback?.();
       }, deltaT * MS_IN_SECOND);
     }
     return () => clearInterval(interval);

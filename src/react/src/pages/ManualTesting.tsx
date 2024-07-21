@@ -1,15 +1,12 @@
-import { useCallback, useState } from "react";
 import { Slider } from "@/components/ui/slider";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import { ReadyState } from "react-use-websocket";
 import Logo from "../assets/logo.png";
-import { DirectionMessage, TemperatureMessage } from "../models/Message";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import WebsocketUtils from "@/utils/WebsocketUtils";
 import PeltierUtils, { Direction } from "@/utils/PeltierUtils";
-
-const DEFAULT_PELTIER_VALUE = 0 as const;
+import { useConfigMessageCallback } from "@/hooks/useConfigMessageCallback";
 
 const directionName = (direction: Direction) => {
   switch (direction) {
@@ -21,31 +18,12 @@ const directionName = (direction: Direction) => {
 };
 
 function ManualTesting() {
-  const { sendMessage, readyState } = useWebSocket(WebsocketUtils.SOCKET_URL, {
-    reconnectAttempts: 10,
-    reconnectInterval: 3000,
-    share: true,
-  });
-
-  const [currentTemperatureMessage, setCurrentTemperatureMessage] =
-    useState<TemperatureMessage>({
-      prefix: "temp",
-      peltier1Value: DEFAULT_PELTIER_VALUE,
-      peltier2Value: DEFAULT_PELTIER_VALUE,
-      peltier3Value: DEFAULT_PELTIER_VALUE,
-      peltier4Value: DEFAULT_PELTIER_VALUE,
-      peltier5Value: DEFAULT_PELTIER_VALUE,
-    });
-
-  const [currentDirectionMessage, setCurrentDirectionMessage] =
-    useState<DirectionMessage>({
-      prefix: "dir",
-      peltier1Direction: Direction.REVERSE,
-      peltier2Direction: Direction.REVERSE,
-      peltier3Direction: Direction.REVERSE,
-      peltier4Direction: Direction.REVERSE,
-      peltier5Direction: Direction.REVERSE,
-    });
+  const {
+    readyState,
+    handleSendConfigMessage,
+    setters: { setCurrentTemperatureMessage, setCurrentDirectionMessage },
+    currentConfigs: { currentTemperatureMessage, currentDirectionMessage },
+  } = useConfigMessageCallback();
 
   const {
     peltier1Value,
@@ -62,23 +40,7 @@ function ManualTesting() {
     peltier5Direction,
   } = currentDirectionMessage;
 
-  const handleSendConfigMessage = useCallback(() => {
-    const directionMessage = `${peltier1Direction} ${peltier2Direction} ${peltier3Direction} ${peltier4Direction} ${peltier5Direction}`;
-    const temperatureMessage = `${peltier1Value} ${peltier2Value} ${peltier3Value} ${peltier4Value} ${peltier5Value}`;
-    sendMessage(`${directionMessage}\n${temperatureMessage}`);
-  }, [
-    sendMessage,
-    peltier1Direction,
-    peltier2Direction,
-    peltier3Direction,
-    peltier4Direction,
-    peltier5Direction,
-    peltier1Value,
-    peltier2Value,
-    peltier3Value,
-    peltier4Value,
-    peltier5Value,
-  ]);
+  handleSendConfigMessage();
 
   const connectionStatus = WebsocketUtils.connectionStatus[readyState];
 
@@ -95,8 +57,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-1-value">Peltier 1 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_VALUE}
-            max={PeltierUtils.PELTIER_MAX_VALUE}
+            min={PeltierUtils.PELTIER_MIN_PERCENT}
+            max={PeltierUtils.PELTIER_MAX_PERCENT}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -110,8 +72,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-2-value">Peltier 2 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_VALUE}
-            max={PeltierUtils.PELTIER_MAX_VALUE}
+            min={PeltierUtils.PELTIER_MIN_PERCENT}
+            max={PeltierUtils.PELTIER_MAX_PERCENT}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -125,8 +87,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-3-value">Peltier 3 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_VALUE}
-            max={PeltierUtils.PELTIER_MAX_VALUE}
+            min={PeltierUtils.PELTIER_MIN_PERCENT}
+            max={PeltierUtils.PELTIER_MAX_PERCENT}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -140,8 +102,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-4-value">Peltier 4 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_VALUE}
-            max={PeltierUtils.PELTIER_MAX_VALUE}
+            min={PeltierUtils.PELTIER_MIN_PERCENT}
+            max={PeltierUtils.PELTIER_MAX_PERCENT}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -155,8 +117,8 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-5-value">Peltier 5 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_VALUE}
-            max={PeltierUtils.PELTIER_MAX_VALUE}
+            min={PeltierUtils.PELTIER_MIN_PERCENT}
+            max={PeltierUtils.PELTIER_MAX_PERCENT}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,

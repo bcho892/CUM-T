@@ -2,13 +2,22 @@ import ArmHeatmap from "@/components/wrappers/ArmHeatmap/ArmHeatmap";
 import MusicPlayer from "@/components/wrappers/MusicPlayer/MusicPlayer";
 import TemperatureUpload from "@/components/wrappers/TemperatureUpload/TemperatureUpload";
 import { TemperatureDataContext } from "@/context/TemperatureDataContext";
+import { useConfigMessageCallback } from "@/hooks/useConfigMessageCallback";
 import { useTemperaturePlayer } from "@/hooks/useTemperaturePlayer";
-import { useContext, useState } from "react";
+import PeltierUtils from "@/utils/PeltierUtils";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 type FlowState = "pick-music" | "get-temperature-profile";
 
 const Experience = () => {
+  const {
+    readyState,
+    handleSendConfigMessage,
+    setters: { setCurrentTemperatureMessage, setCurrentDirectionMessage },
+    currentConfigs: { currentTemperatureMessage, currentDirectionMessage },
+  } = useConfigMessageCallback();
+
   const {
     isPlaying,
     setIsPlaying,
@@ -16,7 +25,29 @@ const Experience = () => {
     currentTemperatureIndex,
   } = useContext(TemperatureDataContext);
 
-  useTemperaturePlayer();
+  const currentTemperatures = useMemo(
+    () => temperatureValues[currentTemperatureIndex],
+    [temperatureValues, currentTemperatureIndex],
+  );
+
+  useEffect(() => {
+    const messages = PeltierUtils.percentageToDuty(currentTemperatures);
+    setCurrentTemperatureMessage(messages.dutyCycles);
+    setCurrentDirectionMessage(messages.directions);
+  }, [
+    currentTemperatures,
+    setCurrentDirectionMessage,
+    setCurrentTemperatureMessage,
+  ]);
+
+  useTemperaturePlayer((val) => {
+    console.log(
+      "fuck",
+      val,
+      currentTemperatureMessage,
+      currentDirectionMessage,
+    );
+  });
 
   const [currentState, setCurrentState] = useState<FlowState>("pick-music");
 
@@ -44,9 +75,7 @@ const Experience = () => {
       >
         <TemperatureUpload />
       </span>
-      <ArmHeatmap
-        currentTemperatureValues={temperatureValues[currentTemperatureIndex]}
-      />
+      <ArmHeatmap currentTemperatureValues={currentTemperatures} />
     </div>
   );
 };

@@ -14,7 +14,7 @@ interface IArmHeatmap {
 }
 
 const temperatureToPercentage = (temperature: number) => {
-  return to2Dp(Math.abs(temperature) / PeltierUtils.PELTIER_MAX_VALUE) * 100;
+  return to2Dp(Math.abs(temperature) / PeltierUtils.PELTIER_MAX_PERCENT) * 100;
 };
 
 const temperatureToOpacity = (temperature: number) => {

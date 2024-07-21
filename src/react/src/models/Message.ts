@@ -1,7 +1,10 @@
 import { Direction } from "@/utils/PeltierUtils";
 
 interface Message {
-  prefix: string;
+  /**
+   * @deprecated not used, probably will be removed
+   */
+  prefix?: string;
 }
 
 export interface TemperatureMessage extends Message {
