@@ -4,10 +4,18 @@ import { DirectionMessage, TemperatureMessage } from "@/models/Message";
 const PeltierUtils = {
   PELTIER_MAX_PERCENT: 100,
   PELTIER_MIN_PERCENT: 0,
-  MAX_DUTY_CYCLE: Math.pow(2, 16) - 1,
   MIN_DUTY_CYCLE: 0,
-  percentMaxDutyCycle: (percent: number) => {
-    return (Math.abs(percent) / 100) * PeltierUtils.MAX_DUTY_CYCLE;
+  MAX_DUTY_CYCLE: Math.pow(2, 16) - 1,
+  /**
+   * @param percent the percentage of the max duty cycle
+   * @param scale This is **NOT** used for computing a duty cycle for the peltiers,
+   * rather to reduce the max temperature in case of the max being too hot
+   * @returns the PWM duty cycle value (16 bits)
+   */
+  percentOfCurrentMaxDutyCycle: (percent: number, scale: number) => {
+    return Math.trunc(
+      (Math.abs(percent) / 100) * (PeltierUtils.MAX_DUTY_CYCLE * (scale / 100)),
+    );
   },
   isPositiveDirection: (percent: number): Direction => {
     if (percent > 0) return Direction.FORWARD;
@@ -16,6 +24,7 @@ const PeltierUtils = {
   },
   percentageToDuty: (
     original?: TemperatureGraphDataPoint,
+    scale: number = 100,
   ): { dutyCycles: TemperatureMessage; directions: DirectionMessage } => {
     if (!original) {
       return {
@@ -34,11 +43,26 @@ const PeltierUtils = {
 
     return {
       dutyCycles: {
-        peltier1Value: PeltierUtils.percentMaxDutyCycle(peltier1Value),
-        peltier2Value: PeltierUtils.percentMaxDutyCycle(peltier2Value),
-        peltier3Value: PeltierUtils.percentMaxDutyCycle(peltier3Value),
-        peltier4Value: PeltierUtils.percentMaxDutyCycle(peltier4Value),
-        peltier5Value: PeltierUtils.percentMaxDutyCycle(peltier5Value),
+        peltier1Value: PeltierUtils.percentOfCurrentMaxDutyCycle(
+          peltier1Value,
+          scale,
+        ),
+        peltier2Value: PeltierUtils.percentOfCurrentMaxDutyCycle(
+          peltier2Value,
+          scale,
+        ),
+        peltier3Value: PeltierUtils.percentOfCurrentMaxDutyCycle(
+          peltier3Value,
+          scale,
+        ),
+        peltier4Value: PeltierUtils.percentOfCurrentMaxDutyCycle(
+          peltier4Value,
+          scale,
+        ),
+        peltier5Value: PeltierUtils.percentOfCurrentMaxDutyCycle(
+          peltier5Value,
+          scale,
+        ),
       },
       directions: {
         peltier1Direction: PeltierUtils.isPositiveDirection(peltier1Value),

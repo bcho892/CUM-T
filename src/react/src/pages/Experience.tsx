@@ -1,3 +1,5 @@
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import ArmHeatmap from "@/components/wrappers/ArmHeatmap/ArmHeatmap";
 import MusicPlayer from "@/components/wrappers/MusicPlayer/MusicPlayer";
 import TemperatureUpload from "@/components/wrappers/TemperatureUpload/TemperatureUpload";
@@ -11,6 +13,9 @@ import { twMerge } from "tailwind-merge";
 type FlowState = "pick-music" | "get-temperature-profile";
 
 const Experience = () => {
+  const [currentState, setCurrentState] = useState<FlowState>("pick-music");
+  const [maxScale, setMaxScale] = useState<number>(100);
+
   const {
     readyState,
     handleSendConfigMessage,
@@ -31,13 +36,17 @@ const Experience = () => {
   );
 
   useEffect(() => {
-    const messages = PeltierUtils.percentageToDuty(currentTemperatures);
+    const messages = PeltierUtils.percentageToDuty(
+      currentTemperatures,
+      maxScale,
+    );
     setCurrentTemperatureMessage(messages.dutyCycles);
     setCurrentDirectionMessage(messages.directions);
   }, [
     currentTemperatures,
     setCurrentDirectionMessage,
     setCurrentTemperatureMessage,
+    maxScale,
   ]);
 
   useTemperaturePlayer((val) => {
@@ -49,11 +58,20 @@ const Experience = () => {
     );
   });
 
-  const [currentState, setCurrentState] = useState<FlowState>("pick-music");
-
   return (
     <div className="flex flex-col gap-4">
       <h1>Experience Haptics and Music!</h1>
+
+      <Label htmlFor="max-duty">
+        Set percentage of max temperature. Current: {maxScale}
+      </Label>
+      <Slider
+        min={PeltierUtils.PELTIER_MIN_PERCENT}
+        max={PeltierUtils.PELTIER_MAX_PERCENT}
+        value={[maxScale]}
+        onValueChange={(value) => setMaxScale(value[0])}
+        id="max-duty"
+      />
       <MusicPlayer
         isPlaying={isPlaying}
         play={() => {
