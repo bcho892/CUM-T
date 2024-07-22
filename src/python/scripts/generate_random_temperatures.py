@@ -8,7 +8,7 @@ f = open(file_path, 'w')
 
 f.write('[\n')
 for i in range(data_points):
-    current_value = random.randrange(-100, 100, 10)
+    current_value = random.randrange(-100, 100, 20)
 
     f.write('   {\n')
     f.write('       "time": {},\n'.format(time_step*i))

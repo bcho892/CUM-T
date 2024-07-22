@@ -4,6 +4,8 @@ import WebsocketUtils from "@/utils/WebsocketUtils";
 import { useCallback, useState } from "react";
 import useWebSocket from "react-use-websocket";
 
+let lastTemperatureMessage: string;
+
 export const useConfigMessageCallback = () => {
   const { sendMessage, readyState } = useWebSocket(WebsocketUtils.SOCKET_URL, {
     reconnectAttempts: 10,
@@ -35,7 +37,14 @@ export const useConfigMessageCallback = () => {
   const handleSendConfigMessage = useCallback(() => {
     const directionMessage = `${peltier1Direction} ${peltier2Direction} ${peltier3Direction} ${peltier4Direction} ${peltier5Direction}`;
     const temperatureMessage = `${peltier1Value} ${peltier2Value} ${peltier3Value} ${peltier4Value} ${peltier5Value}`;
-    sendMessage(`${directionMessage}\n${temperatureMessage}`);
+    const message = `${directionMessage}\n${temperatureMessage}`;
+
+    if (lastTemperatureMessage === message) {
+      return;
+    }
+
+    lastTemperatureMessage = message;
+    sendMessage(message);
   }, [
     sendMessage,
     peltier1Direction,

@@ -36,24 +36,30 @@ const Experience = () => {
     [temperatureValues, currentTemperatureIndex],
   );
 
+  const messages = useMemo(
+    () => PeltierUtils.percentageToDuty(currentTemperatures, maxScale),
+    [currentTemperatures, maxScale],
+  );
+
   useEffect(() => {
-    const messages = PeltierUtils.percentageToDuty(
-      currentTemperatures,
-      maxScale,
-    );
     setCurrentTemperatureMessage(messages.dutyCycles);
     setCurrentDirectionMessage(messages.directions);
+    if (readyState === ReadyState.OPEN) {
+      handleSendConfigMessage();
+    }
   }, [
+    messages,
     currentTemperatures,
     setCurrentDirectionMessage,
     setCurrentTemperatureMessage,
     maxScale,
+    readyState,
+    handleSendConfigMessage,
   ]);
 
   useTemperaturePlayer((val) => {
-    if (readyState === ReadyState.OPEN && val) {
-      handleSendConfigMessage();
-    }
+    if (val) console.log("tick!");
+    else console.log("stopped");
   });
 
   return (
@@ -92,6 +98,11 @@ const Experience = () => {
       >
         <TemperatureUpload />
       </span>
+      <h5>
+        Current duty cycle: {currentTemperatureMessage.peltier1Value}, Current
+        direction:{" "}
+        {PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+      </h5>
       <ArmHeatmap currentTemperatureValues={currentTemperatures} />
     </div>
   );

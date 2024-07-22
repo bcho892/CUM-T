@@ -8,14 +8,10 @@ import WebsocketUtils from "@/utils/WebsocketUtils";
 import PeltierUtils, { Direction } from "@/utils/PeltierUtils";
 import { useConfigMessageCallback } from "@/hooks/useConfigMessageCallback";
 
-const directionName = (direction: Direction) => {
-  switch (direction) {
-    case Direction.REVERSE:
-      return "Reverse";
-    case Direction.FORWARD:
-      return "Forward";
-  }
-};
+const SLIDER_LIMITS = {
+  min: PeltierUtils.MIN_DUTY_CYCLE,
+  max: PeltierUtils.MAX_DUTY_CYCLE,
+} as const;
 
 function ManualTesting() {
   const {
@@ -57,8 +53,7 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-1-value">Peltier 1 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_PERCENT}
-            max={PeltierUtils.PELTIER_MAX_PERCENT}
+            {...SLIDER_LIMITS}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -72,8 +67,7 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-2-value">Peltier 2 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_PERCENT}
-            max={PeltierUtils.PELTIER_MAX_PERCENT}
+            {...SLIDER_LIMITS}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -87,8 +81,7 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-3-value">Peltier 3 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_PERCENT}
-            max={PeltierUtils.PELTIER_MAX_PERCENT}
+            {...SLIDER_LIMITS}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -102,8 +95,7 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-4-value">Peltier 4 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_PERCENT}
-            max={PeltierUtils.PELTIER_MAX_PERCENT}
+            {...SLIDER_LIMITS}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -117,8 +109,7 @@ function ManualTesting() {
         <span>
           <Label htmlFor="peltier-5-value">Peltier 5 Value</Label>
           <Slider
-            min={PeltierUtils.PELTIER_MIN_PERCENT}
-            max={PeltierUtils.PELTIER_MAX_PERCENT}
+            {...SLIDER_LIMITS}
             onValueChange={(value) =>
               setCurrentTemperatureMessage({
                 ...currentTemperatureMessage,
@@ -210,11 +201,11 @@ function ManualTesting() {
       </span>
 
       <span className="flex font-bold">
-        Peltier 1: {directionName(peltier1Direction)}, Peltier 2:{" "}
-        {directionName(peltier2Direction)}, Peltier 3:{" "}
-        {directionName(peltier3Direction)}, Peltier 4:{" "}
-        {directionName(peltier4Direction)}, Peltier 5:{" "}
-        {directionName(peltier5Direction)}
+        Peltier 1: {PeltierUtils.directionName(peltier1Direction)}, Peltier 2:{" "}
+        {PeltierUtils.directionName(peltier2Direction)}, Peltier 3:{" "}
+        {PeltierUtils.directionName(peltier3Direction)}, Peltier 4:{" "}
+        {PeltierUtils.directionName(peltier4Direction)}, Peltier 5:{" "}
+        {PeltierUtils.directionName(peltier5Direction)}
       </span>
 
       <Button

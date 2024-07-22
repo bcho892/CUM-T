@@ -6,6 +6,14 @@ const PeltierUtils = {
   PELTIER_MIN_PERCENT: 0,
   MIN_DUTY_CYCLE: 0,
   MAX_DUTY_CYCLE: Math.pow(2, 16) - 1,
+  directionName: (direction: Direction) => {
+    switch (direction) {
+      case Direction.REVERSE:
+        return "Reverse";
+      case Direction.FORWARD:
+        return "Forward";
+    }
+  },
   /**
    * @param percent the percentage of the max duty cycle
    * @param scale This is **NOT** used for computing a duty cycle for the peltiers,
@@ -76,8 +84,8 @@ const PeltierUtils = {
 } as const;
 
 export enum Direction {
-  REVERSE = 3,
-  FORWARD = 2,
+  REVERSE = 2,
+  FORWARD = 3,
 }
 
 export const DEFAULT_DUTY_CYCLES = {
