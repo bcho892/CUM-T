@@ -8,6 +8,7 @@ import { useConfigMessageCallback } from "@/hooks/useConfigMessageCallback";
 import { useTemperaturePlayer } from "@/hooks/useTemperaturePlayer";
 import PeltierUtils from "@/utils/PeltierUtils";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { ReadyState } from "react-use-websocket";
 import { twMerge } from "tailwind-merge";
 
 type FlowState = "pick-music" | "get-temperature-profile";
@@ -50,12 +51,9 @@ const Experience = () => {
   ]);
 
   useTemperaturePlayer((val) => {
-    console.log(
-      "fuck",
-      val,
-      currentTemperatureMessage,
-      currentDirectionMessage,
-    );
+    if (readyState === ReadyState.OPEN && val) {
+      handleSendConfigMessage();
+    }
   });
 
   return (
@@ -85,6 +83,7 @@ const Experience = () => {
             setCurrentState("get-temperature-profile");
           }
         }}
+        showPlayButton={readyState === ReadyState.OPEN}
       />
       <span
         className={twMerge(

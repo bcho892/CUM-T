@@ -76,8 +76,8 @@ const PeltierUtils = {
 } as const;
 
 export enum Direction {
-  REVERSE = 2,
-  FORWARD = 3,
+  REVERSE = 3,
+  FORWARD = 2,
 }
 
 export const DEFAULT_DUTY_CYCLES = {
