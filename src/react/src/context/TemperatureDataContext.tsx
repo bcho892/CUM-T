@@ -3,7 +3,13 @@ import {
   TemperatureGraphDataPoint,
 } from "@/models/Graph";
 import { arousalTransformer } from "@/utils/Transformers";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 const DEFAULT_DELTA_T = 0.05 as const;
 
@@ -50,7 +56,14 @@ interface ITemperatureDataContext {
    */
   setIsPlaying?: (newState: boolean) => void;
 
+  /**
+   * **Optional** for if the arousal values are to be directly uploaded
+   */
   arousalValueDataPoints?: ArousalGraphDataPoint[];
+
+  /**
+   * **Optional** setter for if the arousal values are to be directly uploaded
+   */
   setArousalValueDataPoints?: (dataPoints: ArousalGraphDataPoint[]) => void;
 }
 
@@ -81,6 +94,21 @@ export const TempeartureDataContextProvider = ({
   }, [arousalGraphDataPoints]);
 
   const [deltaT, setDeltaT] = useState<number>(DEFAULT_DELTA_T);
+
+  const inferDeltaT = useCallback(() => {
+    if (temperatureValues.length > 1) {
+      setDeltaT?.(temperatureValues[1].time - temperatureValues[0].time);
+    }
+  }, [temperatureValues, setDeltaT]);
+
+  /**
+   * Infer the value of deltaT as soon as the temperature profile changes
+   */
+  useEffect(() => {
+    if (temperatureValues) {
+      inferDeltaT();
+    }
+  }, [temperatureValues, inferDeltaT]);
 
   const [currentTemperatureIndex, setCurrentTemperatureIndex] =
     useState<number>(0);
