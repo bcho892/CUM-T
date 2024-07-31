@@ -1,5 +1,9 @@
-import { TemperatureGraphDataPoint } from "@/models/Graph";
-import { createContext, ReactNode, useState } from "react";
+import {
+  ArousalGraphDataPoint,
+  TemperatureGraphDataPoint,
+} from "@/models/Graph";
+import { arousalTransformer } from "@/utils/Transformers";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 const DEFAULT_DELTA_T = 0.05 as const;
 
@@ -45,6 +49,9 @@ interface ITemperatureDataContext {
    * Setter method for `isPlaying`
    */
   setIsPlaying?: (newState: boolean) => void;
+
+  arousalValueDataPoints?: ArousalGraphDataPoint[];
+  setArousalValueDataPoints?: (dataPoints: ArousalGraphDataPoint[]) => void;
 }
 
 export const TemperatureDataContext = createContext<ITemperatureDataContext>({
@@ -62,6 +69,16 @@ export const TempeartureDataContextProvider = ({
   const [temperatureValues, setTemperatureValues] = useState<
     TemperatureGraphDataPoint[]
   >([]);
+
+  const [arousalGraphDataPoints, setArousalGraphDataPoints] = useState<
+    ArousalGraphDataPoint[] | undefined
+  >();
+
+  useEffect(() => {
+    if (arousalGraphDataPoints) {
+      setTemperatureValues(arousalTransformer(arousalGraphDataPoints));
+    }
+  }, [arousalGraphDataPoints]);
 
   const [deltaT, setDeltaT] = useState<number>(DEFAULT_DELTA_T);
 
@@ -84,6 +101,9 @@ export const TempeartureDataContextProvider = ({
 
         isPlaying,
         setIsPlaying,
+
+        arousalValueDataPoints: arousalGraphDataPoints,
+        setArousalValueDataPoints: setArousalGraphDataPoints,
       }}
     >
       {children}

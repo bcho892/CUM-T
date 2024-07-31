@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import ArmHeatmap from "@/components/wrappers/ArmHeatmap/ArmHeatmap";
+import ArousalGraph from "@/components/wrappers/ArousalGraph/ArousalGraph";
 import MusicPlayer from "@/components/wrappers/MusicPlayer/MusicPlayer";
 import TemperatureUpload from "@/components/wrappers/TemperatureUpload/TemperatureUpload";
 import { TemperatureDataContext } from "@/context/TemperatureDataContext";
@@ -29,6 +30,7 @@ const Experience = () => {
     setIsPlaying,
     temperatureValues,
     currentTemperatureIndex,
+    arousalValueDataPoints,
   } = useContext(TemperatureDataContext);
 
   const currentTemperatures = useMemo(
@@ -98,6 +100,7 @@ const Experience = () => {
       >
         <TemperatureUpload />
       </span>
+      {arousalValueDataPoints && <ArousalGraph data={arousalValueDataPoints} />}
       <h5>
         Current duty cycle: {currentTemperatureMessage.peltier1Value}, Current
         direction:{" "}

@@ -49,24 +49,7 @@ PrefsVaultGUID=
 PrefsRevisionGUID=
 
 [Document1]
-DocumentPath=HardwareSchematic.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=0
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=JFFLCTEA
-
-[Document2]
-DocumentPath=Hardware.PcbDoc
+DocumentPath=hardware.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -80,7 +63,24 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=WDLMMYQM
+DocumentUniqueId=
+
+[Document2]
+DocumentPath=HardwareSchematicv2.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=0
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=OGQRKHPB
 
 [Document3]
 DocumentPath=HBridgeInterface.SchDoc
@@ -100,7 +100,7 @@ GenerateClassCluster=0
 DocumentUniqueId=YCFXABOO
 
 [Document4]
-DocumentPath=hardware.OutJob
+DocumentPath=hardware.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -114,175 +114,145 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document5]
-DocumentPath=HardwareSchematicv2.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=OGQRKHPB
-
-[Document6]
-DocumentPath=Hardwarev2.PcbDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=WJQTMUPT
+DocumentUniqueId=EFIJDJQJ
 
 [GeneratedDocument1]
 DocumentPath=Project Outputs for hardware\Design Rule Check - Hardware.html
 DItemRevisionGUID=
 
 [GeneratedDocument2]
-DocumentPath=Project Outputs for hardware\Hardware-RoundHoles.TXT
+DocumentPath=Project Outputs for hardwarev2\Design Rule Check - hardware.html
 DItemRevisionGUID=
 
 [GeneratedDocument3]
-DocumentPath=Project Outputs for hardware\Hardware-SlotHoles.TXT
+DocumentPath=Project Outputs for hardware\Hardware-RoundHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument4]
-DocumentPath=Project Outputs for hardware\Hardware.1
+DocumentPath=Project Outputs for hardware\Hardware-SlotHoles.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument5]
-DocumentPath=Project Outputs for hardware\Hardware.DRR
+DocumentPath=Project Outputs for hardware\Hardware.1
 DItemRevisionGUID=
 
 [GeneratedDocument6]
-DocumentPath=Project Outputs for hardware\Hardware.EXTREP
+DocumentPath=Project Outputs for hardware\Hardware.DRR
 DItemRevisionGUID=
 
 [GeneratedDocument7]
-DocumentPath=Project Outputs for hardware\Hardware.GBL
+DocumentPath=Project Outputs for hardware\Hardware.EXTREP
 DItemRevisionGUID=
 
 [GeneratedDocument8]
-DocumentPath=Project Outputs for hardware\Hardware.GBO
+DocumentPath=Project Outputs for hardware\Hardware.GBL
 DItemRevisionGUID=
 
 [GeneratedDocument9]
-DocumentPath=Project Outputs for hardware\Hardware.GBP
+DocumentPath=Project Outputs for hardware\Hardware.GBO
 DItemRevisionGUID=
 
 [GeneratedDocument10]
-DocumentPath=Project Outputs for hardware\Hardware.GBS
+DocumentPath=Project Outputs for hardware\Hardware.GBP
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for hardware\Hardware.GKO
+DocumentPath=Project Outputs for hardware\Hardware.GBS
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for hardware\Hardware.GM1
+DocumentPath=Project Outputs for hardware\Hardware.GKO
 DItemRevisionGUID=
 
 [GeneratedDocument13]
-DocumentPath=Project Outputs for hardware\Hardware.GM2
+DocumentPath=Project Outputs for hardware\Hardware.GM1
 DItemRevisionGUID=
 
 [GeneratedDocument14]
-DocumentPath=Project Outputs for hardware\Hardware.GM3
+DocumentPath=Project Outputs for hardware\Hardware.GM2
 DItemRevisionGUID=
 
 [GeneratedDocument15]
-DocumentPath=Project Outputs for hardware\Hardware.GM4
+DocumentPath=Project Outputs for hardware\Hardware.GM3
 DItemRevisionGUID=
 
 [GeneratedDocument16]
-DocumentPath=Project Outputs for hardware\Hardware.GM5
+DocumentPath=Project Outputs for hardware\Hardware.GM4
 DItemRevisionGUID=
 
 [GeneratedDocument17]
-DocumentPath=Project Outputs for hardware\Hardware.GM6
+DocumentPath=Project Outputs for hardware\Hardware.GM5
 DItemRevisionGUID=
 
 [GeneratedDocument18]
-DocumentPath=Project Outputs for hardware\Hardware.GM11
+DocumentPath=Project Outputs for hardware\Hardware.GM6
 DItemRevisionGUID=
 
 [GeneratedDocument19]
-DocumentPath=Project Outputs for hardware\Hardware.GM12
+DocumentPath=Project Outputs for hardware\Hardware.GM11
 DItemRevisionGUID=
 
 [GeneratedDocument20]
-DocumentPath=Project Outputs for hardware\Hardware.GM13
+DocumentPath=Project Outputs for hardware\Hardware.GM12
 DItemRevisionGUID=
 
 [GeneratedDocument21]
-DocumentPath=Project Outputs for hardware\Hardware.GM15
+DocumentPath=Project Outputs for hardware\Hardware.GM13
 DItemRevisionGUID=
 
 [GeneratedDocument22]
-DocumentPath=Project Outputs for hardware\Hardware.GM16
+DocumentPath=Project Outputs for hardware\Hardware.GM15
 DItemRevisionGUID=
 
 [GeneratedDocument23]
-DocumentPath=Project Outputs for hardware\Hardware.GM20
+DocumentPath=Project Outputs for hardware\Hardware.GM16
 DItemRevisionGUID=
 
 [GeneratedDocument24]
-DocumentPath=Project Outputs for hardware\Hardware.GM21
+DocumentPath=Project Outputs for hardware\Hardware.GM20
 DItemRevisionGUID=
 
 [GeneratedDocument25]
-DocumentPath=Project Outputs for hardware\Hardware.GM23
+DocumentPath=Project Outputs for hardware\Hardware.GM21
 DItemRevisionGUID=
 
 [GeneratedDocument26]
-DocumentPath=Project Outputs for hardware\Hardware.GM24
+DocumentPath=Project Outputs for hardware\Hardware.GM23
 DItemRevisionGUID=
 
 [GeneratedDocument27]
-DocumentPath=Project Outputs for hardware\Hardware.GML
+DocumentPath=Project Outputs for hardware\Hardware.GM24
 DItemRevisionGUID=
 
 [GeneratedDocument28]
-DocumentPath=Project Outputs for hardware\Hardware.GTL
+DocumentPath=Project Outputs for hardware\Hardware.GML
 DItemRevisionGUID=
 
 [GeneratedDocument29]
-DocumentPath=Project Outputs for hardware\Hardware.GTO
+DocumentPath=Project Outputs for hardware\Hardware.GTL
 DItemRevisionGUID=
 
 [GeneratedDocument30]
-DocumentPath=Project Outputs for hardware\Hardware.GTP
+DocumentPath=Project Outputs for hardware\Hardware.GTO
 DItemRevisionGUID=
 
 [GeneratedDocument31]
-DocumentPath=Project Outputs for hardware\Hardware.GTS
+DocumentPath=Project Outputs for hardware\Hardware.GTP
 DItemRevisionGUID=
 
 [GeneratedDocument32]
-DocumentPath=Project Outputs for hardware\Hardware.LDP
+DocumentPath=Project Outputs for hardware\Hardware.GTS
 DItemRevisionGUID=
 
 [GeneratedDocument33]
-DocumentPath=Project Outputs for hardware\Hardware.REP
+DocumentPath=Project Outputs for hardware\Hardware.LDP
 DItemRevisionGUID=
 
 [GeneratedDocument34]
+DocumentPath=Project Outputs for hardware\Hardware.REP
+DItemRevisionGUID=
+
+[GeneratedDocument35]
 DocumentPath=Project Outputs for hardware\Hardware.RUL
 DItemRevisionGUID=
 
