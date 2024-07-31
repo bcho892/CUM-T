@@ -43,6 +43,23 @@ const Experience = () => {
     [currentTemperatures, maxScale],
   );
 
+  const peltierDutyCycleString = `Current duty cycle(s):\n
+        1: ${currentTemperatureMessage.peltier1Value}
+        2: ${currentTemperatureMessage.peltier2Value}
+        3: ${currentTemperatureMessage.peltier3Value}
+        4: ${currentTemperatureMessage.peltier4Value}
+        5: ${currentTemperatureMessage.peltier5Value}
+  `;
+
+  const peltierDirectionString = `
+        Current direction(s):\n
+        1: ${PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+        2: ${PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+        3: ${PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+        4: ${PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+        5: ${PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+  `;
+
   useEffect(() => {
     setCurrentTemperatureMessage(messages.dutyCycles);
     setCurrentDirectionMessage(messages.directions);
@@ -102,9 +119,9 @@ const Experience = () => {
       </span>
       {arousalValueDataPoints && <ArousalGraph data={arousalValueDataPoints} />}
       <h5>
-        Current duty cycle: {currentTemperatureMessage.peltier1Value}, Current
-        direction:{" "}
-        {PeltierUtils.directionName(currentDirectionMessage.peltier1Direction)}
+        {peltierDutyCycleString}
+        <br />
+        {peltierDirectionString}
       </h5>
       <ArmHeatmap currentTemperatureValues={currentTemperatures} />
     </div>
