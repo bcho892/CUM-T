@@ -119,9 +119,9 @@ const Experience = () => {
       </span>
       {arousalValueDataPoints && <ArousalGraph data={arousalValueDataPoints} />}
       <h5>
-        {peltierDutyCycleString}
+        <strong>{peltierDutyCycleString}</strong>
         <br />
-        {peltierDirectionString}
+        <strong>{peltierDirectionString}</strong>
       </h5>
       <ArmHeatmap currentTemperatureValues={currentTemperatures} />
     </div>

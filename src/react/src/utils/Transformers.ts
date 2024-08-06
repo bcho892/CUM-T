@@ -13,6 +13,11 @@ enum PeltierOrder {
 }
 
 /**
+ * Utility type to determine what "side" should be active for the peltier
+ */
+type PeltierStates = "hot" | "cold";
+
+/**
  * Computes if a peltier should be on or not depending on the *zone* the arousal value falls under.
  *
  * Refer to the research report for full documentation on this process
@@ -32,10 +37,13 @@ const isPeltierActive = (
   const TOTAL_PELTIERS = 5 as const;
   /**
    * Compute the difference in between different max levels in the zones.
+   *
+   * Need to add `1` to the total peltiers because there is an "extra" one
+   * right before the max
    */
-  const step = (max - min) / TOTAL_PELTIERS;
+  const step = (max - min) / (TOTAL_PELTIERS + 1);
 
-  const polarity: "hot" | "cold" = value > 0 ? "hot" : "cold";
+  const polarity: PeltierStates = value > 0 ? "hot" : "cold";
 
   switch (polarity) {
     case "hot":
@@ -53,7 +61,7 @@ const isPeltierActive = (
  * @param polarity `"hot"` or `"cold"`
  * @returns a percentage ranging from `-100` to `100`
  */
-const peltierDutyCycle = (active: boolean, polarity: "hot" | "cold") => {
+const peltierDutyCycle = (active: boolean, polarity: PeltierStates) => {
   const multiplier = polarity === "hot" ? 1 : -1;
   if (active) {
     return multiplier * PeltierUtils.PELTIER_MAX_PERCENT;

@@ -14,6 +14,7 @@ for i in range(data_points):
     f.write('       "time": {},\n'.format(time_step*i))
     f.write('       "value": {}\n'.format(current_value))
     f.write('   }')
+
     if(i != data_points - 1):
         f.write(',\n')
     else:

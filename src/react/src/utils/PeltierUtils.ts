@@ -9,9 +9,9 @@ const PeltierUtils = {
   directionName: (direction: Direction) => {
     switch (direction) {
       case Direction.REVERSE:
-        return "Reverse";
+        return "Hot";
       case Direction.FORWARD:
-        return "Forward";
+        return "Cold";
     }
   },
   /**
