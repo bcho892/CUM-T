@@ -25,6 +25,8 @@ const Experience = () => {
     currentConfigs: { currentTemperatureMessage, currentDirectionMessage },
   } = useConfigMessageCallback();
 
+  const { deltaT } = useContext(TemperatureDataContext);
+
   const {
     isPlaying,
     setIsPlaying,
@@ -81,6 +83,8 @@ const Experience = () => {
     else console.log("stopped");
   });
 
+  const currentTimestamp = deltaT * currentTemperatureIndex;
+
   return (
     <div className="flex flex-col gap-4">
       <h1>Experience Haptics and Music!</h1>
@@ -117,7 +121,12 @@ const Experience = () => {
       >
         <TemperatureUpload />
       </span>
-      {arousalValueDataPoints && <ArousalGraph data={arousalValueDataPoints} />}
+      {arousalValueDataPoints && (
+        <ArousalGraph
+          data={arousalValueDataPoints}
+          currentTimestamp={currentTimestamp}
+        />
+      )}
       <h5>
         <strong>{peltierDutyCycleString}</strong>
         <br />

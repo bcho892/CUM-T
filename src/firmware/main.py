@@ -14,7 +14,7 @@ led.on()
 peltiers_set_1 = PeltierHBridge(0,1,2,0,1,3)
 peltiers_set_2 = PeltierHBridge(12,13,8,12,13,9)
 peltiers_set_3 = PeltierHBridge(4,5,14,4,5,15)
-peltiers_set_4 = PeltierHBridge(10,11,20,10,11,21)
+peltiers_set_4 = PeltierHBridge(22,28,26,22,28,27)
 peltiers_set_5 = PeltierHBridge(18,19,16,18,19,17)
 
 class TestClient(WebSocketClient):
