@@ -35,12 +35,18 @@ const Experience = () => {
     arousalValueDataPoints,
   } = useContext(TemperatureDataContext);
 
+  /**
+   * The unprocessed temperatures as _percentages_ for the current configuration
+   */
   const currentTemperatures = useMemo(
     () => temperatureValues[currentTemperatureIndex],
     [temperatureValues, currentTemperatureIndex],
   );
 
-  const messages = useMemo(
+  /**
+   * The duty cycle for the current configuration - not directly sent over sockets
+   */
+  const dutyCycleValues = useMemo(
     () => PeltierUtils.percentageToDuty(currentTemperatures, maxScale),
     [currentTemperatures, maxScale],
   );
@@ -63,13 +69,13 @@ const Experience = () => {
   `;
 
   useEffect(() => {
-    setCurrentTemperatureMessage(messages.dutyCycles);
-    setCurrentDirectionMessage(messages.directions);
+    setCurrentTemperatureMessage(dutyCycleValues.dutyCycles);
+    setCurrentDirectionMessage(dutyCycleValues.directions);
     if (readyState === ReadyState.OPEN) {
       handleSendConfigMessage();
     }
   }, [
-    messages,
+    dutyCycleValues,
     currentTemperatures,
     setCurrentDirectionMessage,
     setCurrentTemperatureMessage,
