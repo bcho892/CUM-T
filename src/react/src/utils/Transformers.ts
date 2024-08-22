@@ -13,6 +13,16 @@ enum PeltierOrder {
 }
 
 /**
+ * The max _and_ min bounds for the arousal values. This must be consistent with all other annotaions
+ */
+const AROUSAL_LIMITS = 1 as const;
+
+/**
+ * The value that any fluctuations in arousal should deviate from
+ */
+const BASELINE_AROUSAL = 0 as const;
+
+/**
  * Utility type to determine what "side" should be active for the peltier
  */
 type PeltierStates = "hot" | "cold";
@@ -22,34 +32,28 @@ type PeltierStates = "hot" | "cold";
  *
  * Refer to the research report for full documentation on this process
  *
- * @param min the smallest **signed** value in the range of total arousal values
- * @param max the largest **signed** value in the range of total arousal values
  * @param value the **current** arousal value
  * @param priority the number of the peltier to check its active status
  * @returns `true` or `false` depending on where the arousal value falls within the range of values
  */
-const isPeltierActive = (
-  min: number,
-  max: number,
-  value: number,
-  priority: PeltierOrder,
-) => {
+const isPeltierActive = (value: number, priority: PeltierOrder) => {
   const TOTAL_PELTIERS = 5 as const;
+
   /**
-   * Compute the difference in between different max levels in the zones.
+   * Compute the "size" of each zone.
    *
    * Need to add `1` to the total peltiers because there is an "extra" one
    * right before the max
    */
-  const step = (max - min) / (TOTAL_PELTIERS + 1);
+  const step = AROUSAL_LIMITS / (TOTAL_PELTIERS + 1);
 
   const polarity: PeltierStates = value > 0 ? "hot" : "cold";
 
   switch (polarity) {
     case "hot":
-      return { active: value > min + step * priority, polarity };
+      return { active: value > BASELINE_AROUSAL + step * priority, polarity };
     case "cold":
-      return { active: value < max - step * priority, polarity };
+      return { active: value < BASELINE_AROUSAL - step * priority, polarity };
   }
 };
 
@@ -70,28 +74,25 @@ const peltierDutyCycle = (active: boolean, polarity: PeltierStates) => {
   }
 };
 
+/**
+ * Converts a time series of arousal values to the corresponding time series
+ * of temperature percentagaes.
+ *
+ * @param arousalPoints The list of arsousal values in the format specified by {@link ArousalGraphDataPoint},
+ * which will _not_ be mutated
+ * @returns The corresponsding temperature percentages in the format {@link TemperatureGraphDataPoint}
+ */
 export const arousalTransformer = (
   arousalPoints: ArousalGraphDataPoint[],
 ): TemperatureGraphDataPoint[] => {
-  const maxPoint = arousalPoints.reduce((prev, curr) =>
-    prev.value > curr.value ? prev : curr,
-  );
-
-  const minPoint = arousalPoints.reduce((prev, curr) =>
-    prev.value < curr.value ? prev : curr,
-  );
-
-  const max = maxPoint.value;
-  const min = minPoint.value;
-
   const activitySeries = arousalPoints.map(({ value, time }) => {
     return {
       time,
-      peltier1: isPeltierActive(min, max, value, PeltierOrder.FIRST),
-      peltier2: isPeltierActive(min, max, value, PeltierOrder.SECOND),
-      peltier3: isPeltierActive(min, max, value, PeltierOrder.THIRD),
-      peltier4: isPeltierActive(min, max, value, PeltierOrder.FOURTH),
-      peltier5: isPeltierActive(min, max, value, PeltierOrder.FIFTH),
+      peltier1: isPeltierActive(value, PeltierOrder.FIRST),
+      peltier2: isPeltierActive(value, PeltierOrder.SECOND),
+      peltier3: isPeltierActive(value, PeltierOrder.THIRD),
+      peltier4: isPeltierActive(value, PeltierOrder.FOURTH),
+      peltier5: isPeltierActive(value, PeltierOrder.FIFTH),
     };
   });
 
