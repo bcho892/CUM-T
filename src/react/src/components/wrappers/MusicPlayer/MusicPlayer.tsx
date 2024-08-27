@@ -7,10 +7,11 @@ let a: HTMLAudioElement;
 type AudioStates = "playing" | "paused" | "no-file";
 
 interface IMusicPlayer {
-  pause: () => void;
-  play: () => void;
+  pause?: () => void;
+  play?: () => void;
   onFileValidityChange?: (isValid: boolean) => void;
-  isPlaying: boolean;
+  onFileChange?: (src: string) => void;
+  isPlaying?: boolean;
   showPlayButton?: boolean;
 }
 
@@ -19,6 +20,7 @@ const MusicPlayer = ({
   pause,
   isPlaying,
   onFileValidityChange,
+  onFileChange,
   showPlayButton,
 }: IMusicPlayer) => {
   const [currentAudioState, setCurrentAudioState] =
@@ -56,10 +58,10 @@ const MusicPlayer = ({
   const handleClick = () => {
     switch (currentAudioState) {
       case "playing":
-        pause();
+        pause?.();
         break;
       case "paused":
-        play();
+        play?.();
         break;
       case "no-file":
         break;
@@ -78,8 +80,12 @@ const MusicPlayer = ({
   }, [currentAudioState]);
 
   const addFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target?.files && e.target?.files[0]) {
-      setAudio(URL.createObjectURL(e.target.files[0]));
+    const file = e.target?.files && e.target?.files[0];
+    if (file) {
+      const src = URL.createObjectURL(file);
+      setAudio(src);
+      onFileChange?.(src);
+
       setCurrentAudioState("paused");
       onFileValidityChange?.(true);
     } else {

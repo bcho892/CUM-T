@@ -23,9 +23,14 @@ const AROUSAL_LIMITS = 1 as const;
 const BASELINE_AROUSAL = 0 as const;
 
 /**
+ * Each "peltier" refers to a zone on the sleeve
+ */
+export const TOTAL_PELTIERS = 5 as const;
+
+/**
  * Utility type to determine what "side" should be active for the peltier
  */
-type PeltierStates = "hot" | "cold";
+export type PeltierStates = "hot" | "cold";
 
 /**
  * Computes if a peltier should be on or not depending on the *zone* the arousal value falls under.
@@ -37,8 +42,6 @@ type PeltierStates = "hot" | "cold";
  * @returns `true` or `false` depending on where the arousal value falls within the range of values
  */
 const isPeltierActive = (value: number, priority: PeltierOrder) => {
-  const TOTAL_PELTIERS = 5 as const;
-
   /**
    * Compute the "size" of each zone.
    *
