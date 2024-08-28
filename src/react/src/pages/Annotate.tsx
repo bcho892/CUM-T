@@ -49,6 +49,7 @@ const Annotate = () => {
       <div className="flex justify-between">
         <h3 className="text-gray-800">Annotation timeline for current song</h3>
         <Button
+          disabled={!audioSrc}
           onClick={() =>
             exportAnnotations(
               Math.ceil(audioStats?.duration || 0),
