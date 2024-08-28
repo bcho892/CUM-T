@@ -42,7 +42,7 @@ const PureAudioPlayer = ({
     }
   }, [onDurationChange, onTimeUpdate]);
 
-  return <audio ref={audioRef} src={src} controls />;
+  return <audio className="w-full" ref={audioRef} src={src} controls />;
 };
 
 export default PureAudioPlayer;

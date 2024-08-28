@@ -15,7 +15,7 @@ enum PeltierOrder {
 /**
  * The max _and_ min bounds for the arousal values. This must be consistent with all other annotaions
  */
-const AROUSAL_LIMITS = 1 as const;
+const AROUSAL_LIMITS = 5 as const;
 
 /**
  * The value that any fluctuations in arousal should deviate from
