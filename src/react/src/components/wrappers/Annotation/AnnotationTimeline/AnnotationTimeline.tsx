@@ -6,7 +6,7 @@ interface IAnnotationTimeline {
   length: number;
   audioTimestamp: number;
   deltaT: number;
-  selectedTimestamp: number;
+  selectedTimestamps: number[];
   onTimeClick?: (timestamp: number) => void;
   getAssociatedZone?: (timestamp: number) => number;
 }
@@ -17,7 +17,7 @@ const AnnotationTimeline = ({
   length,
   deltaT,
   onTimeClick,
-  selectedTimestamp,
+  selectedTimestamps,
   audioTimestamp,
   getAssociatedZone,
 }: IAnnotationTimeline) => {
@@ -61,7 +61,7 @@ const AnnotationTimeline = ({
                 }
               </div>
               <AnnoationTimelinePoint
-                selected={selectedTimestamp === timestamp}
+                selected={selectedTimestamps.includes(timestamp)}
                 timestamp={`${timestamp}s`}
                 onClick={() => onTimeClick?.(timestamp)}
               />

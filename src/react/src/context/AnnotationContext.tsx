@@ -7,9 +7,9 @@ type AudioStats = { duration: number; timestamp: number };
  */
 interface IAnnotationContext {
   /** The user selected timestamp in the annotation context. */
-  selectedTimestamp: number;
+  selectedTimestamps: number[];
   /** Function to set the current time. */
-  setCurrentTime?: (newTime: number) => void;
+  setSelectedTimestamps?: (newTime: number[]) => void;
   /** Delta time for the annotation context. */
   deltaT: number;
 
@@ -33,7 +33,7 @@ interface IAnnotationContext {
  * Annotation Context with default values.
  */
 export const AnnotationContext = createContext<IAnnotationContext>({
-  selectedTimestamp: 0,
+  selectedTimestamps: [0],
   deltaT: 1,
 });
 
@@ -45,7 +45,7 @@ export const AnnotationContext = createContext<IAnnotationContext>({
 export const AnnotationContextProvider = ({
   children,
 }: Readonly<{ children: ReactNode }>) => {
-  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [selectedTimestamps, setSelectedTimestamps] = useState<number[]>([0]);
   const [deltaT, setDeltaT] = useState<number>(1);
   const [annotations, setAnnotations] = useState<{ [key: number]: number }>({});
   const [audioSrc, setAudioSrc] = useState<string | undefined>();
@@ -95,8 +95,8 @@ export const AnnotationContextProvider = ({
   return (
     <AnnotationContext.Provider
       value={{
-        selectedTimestamp: currentTime,
-        setCurrentTime,
+        selectedTimestamps: selectedTimestamps,
+        setSelectedTimestamps: setSelectedTimestamps,
         deltaT,
         setDeltaT,
         audioSrc,

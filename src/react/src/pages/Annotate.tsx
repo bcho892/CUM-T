@@ -5,7 +5,7 @@ import MusicPlayer from "@/components/wrappers/MusicPlayer/MusicPlayer";
 import PureAudioPlayer from "@/components/wrappers/PureAudioPlayer/PureAudioPlayer";
 import { AnnotationContext } from "@/context/AnnotationContext";
 import { ArousalGraphDataPoint } from "@/models/Graph";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const exportAnnotations = (
   totalTimestamps: number,
@@ -31,16 +31,33 @@ const exportAnnotations = (
 
 const Annotate = () => {
   const {
-    selectedTimestamp,
+    selectedTimestamps,
     deltaT,
     updateAnnotation,
     getAnnotation,
-    setCurrentTime,
+    setSelectedTimestamps,
     setAudioSrc,
     audioSrc,
     setAudioStats,
     audioStats,
   } = useContext(AnnotationContext);
+
+  const [{ first }, setTimestamps] = useState<{ first?: number }>({ first: 0 });
+
+  const handleTimeClick = (time: number) => {
+    if (!first) {
+      setTimestamps({ first: time });
+    } else {
+      const allSelected = [];
+      const start = Math.min(time, first);
+      const end = Math.max(time, first);
+      for (let timestamp = start; timestamp <= end; timestamp += deltaT) {
+        allSelected.push(timestamp);
+      }
+      setSelectedTimestamps?.(allSelected);
+      setTimestamps({});
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -65,10 +82,10 @@ const Annotate = () => {
         <div className="flex flex-col min-w-full w-fit gap-3 p-3 bg-slate-300 rounded-md">
           <AnnotationTimeline
             audioTimestamp={audioStats?.timestamp || 0}
-            selectedTimestamp={selectedTimestamp}
+            selectedTimestamps={selectedTimestamps}
             deltaT={deltaT}
             length={Math.ceil(audioStats?.duration || 1)}
-            onTimeClick={(newTime) => setCurrentTime?.(newTime)}
+            onTimeClick={(newTime) => handleTimeClick(newTime)}
             getAssociatedZone={(timeStamp) => getAnnotation?.(timeStamp) || NaN}
           />
         </div>
@@ -79,13 +96,18 @@ const Annotate = () => {
         onDurationChange={(d) => setAudioStats?.(d)}
         onTimeUpdate={(t) => setAudioStats?.(undefined, t)}
       />
-      <h3>Pick the temperature for time {selectedTimestamp}s</h3>
+      <h3>
+        Pick the temperature for time{" "}
+        <strong className="italic">{selectedTimestamps.join("s, ")}s</strong>
+      </h3>
       <div className="bg-slate-300 p-3 rounded-md flex flex-col gap-3">
         <AnnotationLevelBar
-          handleZoneChange={(zone) =>
-            updateAnnotation?.(selectedTimestamp, zone)
-          }
-          selectedZone={getAnnotation?.(selectedTimestamp)}
+          handleZoneChange={(zone) => {
+            selectedTimestamps.forEach((timestamp) => {
+              updateAnnotation?.(timestamp, zone);
+            });
+          }}
+          selectedZone={getAnnotation?.(selectedTimestamps[0])}
         />
       </div>
     </div>
