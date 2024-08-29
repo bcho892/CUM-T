@@ -58,7 +58,7 @@ const AnnotationLevelBar = ({
   handleZoneChange,
 }: IAnnotationLevelBar): JSX.Element => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-row-reverse gap-2">
       {ENUMERATED_ZONES.map((_, i) => {
         // Note that the zones render from top down
         const zone = ENUMERATED_ZONES.length - i;
