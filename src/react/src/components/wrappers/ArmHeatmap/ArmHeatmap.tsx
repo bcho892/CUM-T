@@ -48,6 +48,10 @@ const TemperatureIndicator = ({
 };
 
 const ArmHeatmap = ({ currentTemperatureValues }: Readonly<IArmHeatmap>) => {
+  /**
+   * Used for styling only, gives the required opacity for each of zones that can be directly
+   * applied to an inline style
+   */
   const opacities = useMemo(() => {
     return {
       zone1: temperatureToOpacity(currentTemperatureValues?.peltier1Value || 0),
@@ -58,6 +62,9 @@ const ArmHeatmap = ({ currentTemperatureValues }: Readonly<IArmHeatmap>) => {
     };
   }, [currentTemperatureValues]);
 
+  /**
+   * Checks if a zone should be classified as "hot" or "cold"
+   */
   const states = useMemo(() => {
     return {
       zone1: temperatureToState(currentTemperatureValues?.peltier1Value || 0),
@@ -68,6 +75,9 @@ const ArmHeatmap = ({ currentTemperatureValues }: Readonly<IArmHeatmap>) => {
     };
   }, [currentTemperatureValues]);
 
+  /**
+   * The percentages to display on the information bubble for the haptic sleeve visualisation
+   */
   const percentages = useMemo(() => {
     return {
       zone1: temperatureToPercentage(

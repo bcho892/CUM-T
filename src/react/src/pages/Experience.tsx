@@ -16,6 +16,9 @@ import { twMerge } from "tailwind-merge";
 type FlowState = "pick-music" | "get-temperature-profile";
 
 const Experience = () => {
+  /**
+   * What stage of the page the user is on
+   */
   const [currentState, setCurrentState] = useState<FlowState>("pick-music");
   const [maxScale, setMaxScale] = useState<number>(100);
 

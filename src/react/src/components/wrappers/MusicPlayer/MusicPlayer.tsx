@@ -8,11 +8,32 @@ let a: HTMLAudioElement;
 type AudioStates = "playing" | "paused" | "no-file";
 
 interface IMusicPlayer {
+  /**
+   * Callback when the pause button is clicked
+   */
   pause?: () => void;
+  /**
+   * Callback when the play button is clicked
+   */
   play?: () => void;
+  /**
+   * Callback which is called to check if the uploaded audio file is valid
+   */
   onFileValidityChange?: (isValid: boolean) => void;
+  /**
+   * Callback to handle filepath of uploaded file changing
+   *
+   * @param src the file path of a successfully uploaded audio file
+   */
   onFileChange?: (src: string) => void;
+  /**
+   * Whether the audio should play or not - which lets the playing status
+   * be controlled by the consumer of this component
+   */
   isPlaying?: boolean;
+  /**
+   * Displays the play button for the custom control mechanism
+   */
   showPlayButton?: boolean;
 }
 

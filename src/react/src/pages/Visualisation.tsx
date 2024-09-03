@@ -18,7 +18,7 @@ const Visualisation = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <h1>Visualise the temperature over time</h1>
+      <h1>Temperature Visualisation</h1>
       {temperatureValues.length > 0 ? (
         <TemperatureGraph
           data={temperatureValues}
