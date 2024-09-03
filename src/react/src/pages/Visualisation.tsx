@@ -25,17 +25,16 @@ const Visualisation = () => {
           currentTimestamp={currentTime}
         />
       ) : (
-        <>
+        <div>
           <h2>Load a temperature profile</h2>
           <p>Either generate a profile or make your own</p>
-        </>
+        </div>
       )}
       <h2>Haptic sleeve temperature zones</h2>
       <ArmHeatmap
         currentTemperatureValues={temperatureValues[currentTemperatureIndex]}
       />
-
-      <TemperatureUpload />
+      <TemperatureUpload showControls />
     </div>
   );
 };

@@ -47,7 +47,7 @@ const AnnotationTimeline = ({
           const timestamp = i * deltaT;
           const associatedZone = getAssociatedZone?.(timestamp) || 0;
           return (
-            <div className="grid grid-rows-[240px_1fr] items-center">
+            <div className="grid grid-rows-[260px_1fr] items-center">
               <div className="grid grid-rows-2">
                 {
                   <span className={twMerge(associatedZone <= 0 && "invisible")}>

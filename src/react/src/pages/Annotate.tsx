@@ -132,7 +132,7 @@ const Annotate = () => {
         Pick the temperature for time{" "}
         <strong className="italic">{selectedTimestamps.join("s, ")}s</strong>
       </h3>
-      <div className="bg-slate-300 p-3 rounded-md flex flex-col gap-3">
+      <div className="bg-slate-300 p-3 rounded-md flex flex-col gap-3 ">
         <AnnotationLevelBar
           handleZoneChange={(zone) => {
             selectedTimestamps.forEach((timestamp) => {
