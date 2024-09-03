@@ -120,8 +120,12 @@ const RawArousalUpload = () => {
   );
 };
 
-const TemperatureUpload = () => {
-  const [currentMode, setCurrentMode] = useState<Mode>("raw-temperature");
+interface ITemperatureUpload {
+  showControls?: boolean;
+}
+
+const TemperatureUpload = ({ showControls = false }: ITemperatureUpload) => {
+  const [currentMode, setCurrentMode] = useState<Mode>("raw-arousal");
 
   const { temperatureValues, isPlaying, setIsPlaying } = useContext(
     TemperatureDataContext,
@@ -132,6 +136,7 @@ const TemperatureUpload = () => {
       <div className="flex items-center space-x-2 my-2">
         <Switch
           id="mode-switch"
+          defaultChecked={currentMode === "raw-arousal"}
           onCheckedChange={(checked) =>
             setCurrentMode(checked ? "raw-arousal" : "raw-temperature")
           }
@@ -143,22 +148,24 @@ const TemperatureUpload = () => {
       {currentMode === "raw-temperature" && <RawTemperatureUpload />}
       {currentMode === "raw-arousal" && <RawArousalUpload />}
 
-      <span className="gap-2 flex mt-3">
-        <Button
-          disabled={!temperatureValues || isPlaying}
-          onClick={() => {
-            setIsPlaying?.(true);
-          }}
-        >
-          Start
-        </Button>
-        <Button
-          disabled={!!temperatureValues && !isPlaying}
-          onClick={() => setIsPlaying?.(false)}
-        >
-          Stop
-        </Button>
-      </span>
+      {showControls && (
+        <span className="gap-2 flex mt-3">
+          <Button
+            disabled={!temperatureValues || isPlaying}
+            onClick={() => {
+              setIsPlaying?.(true);
+            }}
+          >
+            Start
+          </Button>
+          <Button
+            disabled={!!temperatureValues && !isPlaying}
+            onClick={() => setIsPlaying?.(false)}
+          >
+            Stop
+          </Button>
+        </span>
+      )}
     </>
   );
 };

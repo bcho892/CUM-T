@@ -4,10 +4,10 @@ import { Slider } from "@/components/ui/slider";
 import ArmHeatmap from "@/components/wrappers/ArmHeatmap/ArmHeatmap";
 import ArousalGraph from "@/components/wrappers/ArousalGraph/ArousalGraph";
 import MusicPlayer from "@/components/wrappers/MusicPlayer/MusicPlayer";
+import PureAudioPlayer from "@/components/wrappers/PureAudioPlayer/PureAudioPlayer";
 import TemperatureUpload from "@/components/wrappers/TemperatureUpload/TemperatureUpload";
 import { TemperatureDataContext } from "@/context/TemperatureDataContext";
 import { useConfigMessageCallback } from "@/hooks/useConfigMessageCallback";
-import { useTemperaturePlayer } from "@/hooks/useTemperaturePlayer";
 import PeltierUtils from "@/utils/PeltierUtils";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { ReadyState } from "react-use-websocket";
@@ -33,9 +33,12 @@ const Experience = () => {
     setIsPlaying,
     temperatureValues,
     currentTemperatureIndex,
+    setCurrentTemperatureIndex,
     arousalValueDataPoints,
     setArousalValueDataPoints,
   } = useContext(TemperatureDataContext);
+
+  const [audioSrc, setAudioSrc] = useState<string | undefined>();
 
   /**
    * The unprocessed temperatures as _percentages_ for the current configuration
@@ -92,11 +95,6 @@ const Experience = () => {
     handleSendConfigMessage,
   ]);
 
-  /**
-   * Place callbacks in here on each tick
-   */
-  useTemperaturePlayer(() => {});
-
   const handleReset = () => {
     /**
      * Pause the music
@@ -143,21 +141,17 @@ const Experience = () => {
       />
 
       <h2>Step 1 - Upload Music File</h2>
+
       <MusicPlayer
+        onFileChange={(newSrc) => setAudioSrc?.(newSrc)}
         isPlaying={isPlaying}
-        play={() => {
-          setIsPlaying?.(true);
-        }}
-        pause={() => {
-          setIsPlaying?.(false);
-        }}
         onFileValidityChange={(valid) => {
           if (valid) {
             setCurrentState("get-temperature-profile");
           }
         }}
-        showPlayButton={readyState === ReadyState.OPEN}
       />
+
       <span
         className={twMerge(
           currentState === "pick-music" && "blur-sm pointer-events-none",
@@ -166,6 +160,13 @@ const Experience = () => {
         <h2>Step 2 - Upload Temperature Profile</h2>
         <TemperatureUpload />
       </span>
+
+      <PureAudioPlayer
+        src={audioSrc || ""}
+        onTimeUpdate={(newTime) => {
+          setCurrentTemperatureIndex?.(Math.floor(newTime));
+        }}
+      />
       {arousalValueDataPoints && (
         <ArousalGraph
           data={arousalValueDataPoints}
