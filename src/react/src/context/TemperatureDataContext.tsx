@@ -115,6 +115,12 @@ export const TempeartureDataContextProvider = ({
 
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (!isPlaying) {
+      setCurrentTemperatureIndex(0);
+    }
+  }, [isPlaying]);
+
   return (
     <TemperatureDataContext.Provider
       value={{

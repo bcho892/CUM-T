@@ -30,7 +30,6 @@ const Visualisation = () => {
           <p>Either generate a profile or make your own</p>
         </>
       )}
-
       <h2>Haptic sleeve temperature zones</h2>
       <ArmHeatmap
         currentTemperatureValues={temperatureValues[currentTemperatureIndex]}

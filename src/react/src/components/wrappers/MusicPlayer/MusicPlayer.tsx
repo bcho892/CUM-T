@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 
 let a: HTMLAudioElement;
@@ -103,7 +104,10 @@ const MusicPlayer = ({
           {buttonText}
         </Button>
       )}
-      <Input type="file" onChange={addFile} accept="audio/*" />
+      <span>
+        <Label htmlFor="upload">Select Music</Label>
+        <Input type="file" name="upload" onChange={addFile} accept="audio/*" />
+      </span>
     </span>
   );
 };

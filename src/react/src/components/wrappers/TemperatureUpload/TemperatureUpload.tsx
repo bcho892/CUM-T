@@ -143,7 +143,7 @@ const TemperatureUpload = () => {
       {currentMode === "raw-temperature" && <RawTemperatureUpload />}
       {currentMode === "raw-arousal" && <RawArousalUpload />}
 
-      <span className="gap-2 flex">
+      <span className="gap-2 flex mt-3">
         <Button
           disabled={!temperatureValues || isPlaying}
           onClick={() => {
