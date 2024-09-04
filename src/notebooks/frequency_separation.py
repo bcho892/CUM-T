@@ -205,3 +205,14 @@ write_array_to_file(centroid_high_file_name, normalised_cent_high)
 
 
 # %%
+y, sr = librosa.load('/Users/rishishukla/projects/P4P-Timbre/src/music/Main TitleJohn WilliamsJaws (From The Jaws Soundtrack).mp3', sr=44100)
+
+# And compute the spectrogram magnitude and phase
+S_full, phase = librosa.magphase(librosa.stft(y))
+
+layout = [list(".AAAA"), list(".BBBB")]
+fig, ax = plt.subplot_mosaic(layout, constrained_layout=True)
+ax['A'].set(title='Extracted Harmonic Element')
+librosa.display.specshow(librosa.amplitude_to_db(S_full, ref=np.max),
+                         y_axis='log', x_axis='time', ax=ax['A'])
+# %%
