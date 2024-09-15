@@ -216,3 +216,69 @@ ax['A'].set(title='Extracted Harmonic Element')
 librosa.display.specshow(librosa.amplitude_to_db(S_full, ref=np.max),
                          y_axis='log', x_axis='time', ax=ax['A'])
 # %%
+
+import librosa
+import librosa.display
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Load the audio file and extract features
+audio_file = '/Users/rishishukla/projects/P4P-Timbre/src/music/can-you-hear-the-music.mp3'
+y, sr = librosa.load(audio_file, sr=None)
+
+# Extract features
+tempo, _ = librosa.beat.beat_track(y=y, sr=sr)
+spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)[0]
+spectral_contrast = librosa.feature.spectral_contrast(y=y, sr=sr)
+rms_energy = librosa.feature.rms(y=y)[0]
+times = librosa.times_like(rms_energy, sr=sr)
+
+# Function to calculate the average values in 1-second intervals
+def average_per_second(times, feature, sr):
+    seconds = np.floor(times)  # Convert time to whole seconds
+    unique_seconds = np.unique(seconds)  # Get unique seconds
+    avg_feature_per_second = []
+    
+    # Average the feature values for each second
+    for sec in unique_seconds:
+        idx = np.where(seconds == sec)[0]  # Get indices for the current second
+        avg_feature_per_second.append(np.mean(feature[idx]))  # Average for that second
+    
+    return unique_seconds, np.array(avg_feature_per_second)
+
+# Average the features per second
+centroid_seconds, avg_spectral_centroid = average_per_second(times, spectral_centroid, sr)
+rms_seconds, avg_rms_energy = average_per_second(times, rms_energy, sr)
+contrast_seconds, avg_spectral_contrast = average_per_second(times, np.mean(spectral_contrast, axis=0), sr)
+
+# Plotting
+plt.figure(figsize=(14, 10))
+
+# Plot averaged Spectral Centroid (Brightness)
+plt.subplot(3, 1, 1)
+plt.step(centroid_seconds, avg_spectral_centroid, color='r', where='mid')
+plt.title('Averaged Spectral Centroid Over Time (Brightness)')
+plt.ylabel('Spectral Centroid (Hz)')
+plt.grid(True)
+
+# Plot averaged RMS Energy (Loudness/Intensity)
+plt.subplot(3, 1, 2)
+plt.step(rms_seconds, avg_rms_energy, color='g', where='mid')
+plt.title('Averaged RMS Energy Over Time (Intensity)')
+plt.ylabel('RMS Energy')
+plt.grid(True)
+
+# Plot averaged Spectral Contrast
+plt.subplot(3, 1, 3)
+plt.step(contrast_seconds, avg_spectral_contrast, color='b', where='mid')
+plt.title('Averaged Spectral Contrast Over Time')
+plt.ylabel('Spectral Contrast')
+plt.xlabel('Time (s)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print("Tempo:", tempo)
+
+# %%
