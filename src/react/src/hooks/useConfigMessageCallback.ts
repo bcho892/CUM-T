@@ -6,6 +6,13 @@ import useWebSocket from "react-use-websocket";
 
 let lastTemperatureMessage: string;
 
+/**
+ * Hook that automatically sends new configuration messages as required
+ * based ln changes to the peltier values and directions defined in
+ * {@link currentTemperatureMessage} and {@link currentDirectionMessage}, which
+ * can be changed through using the setter functions {@link setCurrentTemperatureMessage}
+ * and {@link currentDirectionMessage}
+ */
 export const useConfigMessageCallback = () => {
   const { sendMessage, readyState } = useWebSocket(WebsocketUtils.SOCKET_URL, {
     reconnectAttempts: 10,
@@ -26,6 +33,7 @@ export const useConfigMessageCallback = () => {
     peltier4Value,
     peltier5Value,
   } = currentTemperatureMessage;
+
   const {
     peltier1Direction,
     peltier2Direction,

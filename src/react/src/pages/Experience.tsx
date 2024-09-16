@@ -20,6 +20,9 @@ const Experience = () => {
    * What stage of the page the user is on
    */
   const [currentState, setCurrentState] = useState<FlowState>("pick-music");
+  /**
+   * Used to control what 100% should be like on the sleeve:w
+   */
   const [maxScale, setMaxScale] = useState<number>(100);
 
   const {

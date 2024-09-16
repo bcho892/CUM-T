@@ -7,7 +7,6 @@ import wifi
 from ws_connection import ClientClosedError
 from ws_server import WebSocketServer, WebSocketClient
 
-
 led = Pin("LED", Pin.OUT)
 led.on()
 
@@ -28,6 +27,8 @@ class TestClient(WebSocketClient):
                 return
             print(msg)
             msg = msg.decode('ascii')
+
+            # Message Format: {directions}\n{temperatures}
             parts = msg.split('\n')
 
             dirs = parts[0].split(' ')

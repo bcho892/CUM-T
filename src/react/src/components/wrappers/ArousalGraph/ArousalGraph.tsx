@@ -13,13 +13,29 @@ import {
 } from "recharts";
 
 interface IArousalGraph {
+  /**
+   * List of data to plot on the arousal graph in format described by
+   * {@link ArousalGraphDataPoint}
+   */
   data: ArousalGraphDataPoint[];
+  /**
+   * The timestep that should be used for each of the arousal points
+   */
   deltaT?: number;
+  /**
+   * The current point in time which is being actuated
+   */
   currentTimestamp?: number;
 }
 
+/**
+ * Colour for line on arousal graph
+ */
 const STROKE_COLOUR = "#8ED081" as const;
 
+/**
+ * Graph which displays a **single** time series of arousal values
+ */
 const ArousalGraph = ({ data, currentTimestamp }: IArousalGraph) => {
   return (
     <ResponsiveContainer width="100%" height={400}>

@@ -8,6 +8,9 @@ import PeltierUtils, { Direction } from "@/utils/PeltierUtils";
 import { useConfigMessageCallback } from "@/hooks/useConfigMessageCallback";
 import { Switch } from "@/components/ui/switch";
 
+/**
+ * Util to constrain the sliders for duty cycle
+ */
 const SLIDER_LIMITS = {
   min: PeltierUtils.MIN_DUTY_CYCLE,
   max: PeltierUtils.MAX_DUTY_CYCLE,
@@ -21,6 +24,9 @@ function ManualTesting() {
     currentConfigs: { currentTemperatureMessage, currentDirectionMessage },
   } = useConfigMessageCallback();
 
+  /**
+   * The non-mutable values for current temperatures on each peltier
+   */
   const {
     peltier1Value,
     peltier2Value,
@@ -28,6 +34,10 @@ function ManualTesting() {
     peltier4Value,
     peltier5Value,
   } = currentTemperatureMessage;
+
+  /**
+   * The non-mutable values for current directions (hot or cold) on each peltier
+   */
   const {
     peltier1Direction,
     peltier2Direction,
@@ -38,6 +48,9 @@ function ManualTesting() {
 
   handleSendConfigMessage();
 
+  /**
+   * To base logic off the current connection status
+   */
   const connectionStatus = WebsocketUtils.connectionStatus[readyState];
 
   return (

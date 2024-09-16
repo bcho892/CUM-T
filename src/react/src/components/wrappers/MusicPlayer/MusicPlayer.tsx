@@ -48,23 +48,23 @@ const MusicPlayer = ({
   const [currentAudioState, setCurrentAudioState] =
     useState<AudioStates>("no-file");
 
-  const [audio, setAudio] = useState<string>();
+  const [audioSrc, setAudioSrc] = useState<string>();
 
   useEffect(() => {
     if (a) {
       a.pause();
       setCurrentAudioState("paused");
     }
-    if (audio) {
-      a = new Audio(audio);
+    if (audioSrc) {
+      a = new Audio(audioSrc);
       a.onended = () => {
         setCurrentAudioState("paused");
       };
     }
-  }, [audio]);
+  }, [audioSrc]);
 
   useEffect(() => {
-    if (!audio) {
+    if (!audioSrc) {
       setCurrentAudioState("no-file");
       return;
     }
@@ -75,7 +75,7 @@ const MusicPlayer = ({
       setCurrentAudioState("paused");
       a.pause();
     }
-  }, [isPlaying, audio]);
+  }, [isPlaying, audioSrc]);
 
   const handleClick = () => {
     switch (currentAudioState) {
@@ -105,7 +105,7 @@ const MusicPlayer = ({
     const file = e.target?.files && e.target?.files[0];
     if (file) {
       const src = URL.createObjectURL(file);
-      setAudio(src);
+      setAudioSrc(src);
       onFileChange?.(src);
 
       setCurrentAudioState("paused");
